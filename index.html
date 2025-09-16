@@ -1175,61 +1175,6 @@
         min-height: 60px;
       }
       
-      /* Fix control buttons for mobile - ensure proper visibility and positioning */
-      .control-buttons {
-        padding: 20px 15px;
-        gap: 12px;
-        display: flex !important;
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: calc(100% - 40px);
-        max-width: 400px;
-        background: #f8f8f8;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 100;
-      }
-      
-      /* Hide the original control buttons on mobile since we have them in chat */
-      .control-buttons {
-        display: none !important;
-      }
-      
-      /* Style the chat control buttons for mobile */
-      .chat-control-buttons {
-        padding: 12px 15px;
-        gap: 10px;
-      }
-      
-      .chat-control-buttons .control-btn {
-        padding: 12px 15px;
-        min-height: 44px;
-        font-size: 15px;
-      }
-      
-      .control-btn {
-        padding: 20px 15px;
-        min-height: 60px;
-        font-size: 16px;
-        font-weight: 600;
-        display: block;
-      }
-      
-      /* Override hidden class specifically for mobile buttons when they should be visible */
-      .control-buttons .find-match-btn:not(.hidden) {
-        display: block !important;
-      }
-      
-      .control-buttons .disconnect-btn:not(.hidden) {
-        display: block !important;
-      }
-      
-      .control-buttons .new-match-btn:not(.hidden) {
-        display: block !important;
-      }
-      
       .voice-controls {
         gap: 12px;
       }
@@ -1273,7 +1218,6 @@
       /* Adjust main screen to account for floating buttons */
       .main-screen {
         min-height: auto;
-        padding-bottom: 100px;
       }
       
       /* Ensure stats panel has proper spacing */
@@ -1463,13 +1407,6 @@
         </div>
       </div>
     </div>
-    
-    <!-- Control Buttons -->
-    <div class="control-buttons hidden" id="controlButtons">
-      <button class="control-btn find-match-btn hidden" id="findMatchBtn" onclick="findMatch()">Find Match</button>
-      <button class="control-btn disconnect-btn hidden" id="disconnectBtn" onclick="disconnect()">Disconnect</button>
-      <button class="control-btn new-match-btn hidden" id="newMatchBtn" onclick="findNewMatch()">New Match</button>
-    </div>
   </div>
 
   <!-- Call Screen Overlay -->
@@ -1568,11 +1505,6 @@
       chatMessages: document.getElementById('chatMessages'),
       messageInput: document.getElementById('messageInput'),
       typingIndicator: document.getElementById('typingIndicator'),
-      controlButtons: document.getElementById('controlButtons'),
-      findMatchBtn: document.getElementById('findMatchBtn'),
-      disconnectBtn: document.getElementById('disconnectBtn'),
-      newMatchBtn: document.getElementById('newMatchBtn'),
-      partnerName: document.getElementById('partnerName'),
       partnerNameHeader: document.getElementById('partnerNameHeader'),
       partnerAvatar: document.getElementById('partnerAvatar'),
       partnerStatus: document.getElementById('partnerStatus'),
@@ -1721,22 +1653,13 @@
       elements.profileSetup.classList.add('hidden');
       elements.statsPanel.classList.remove('hidden');
       elements.mainScreen.classList.remove('hidden');
-      elements.controlButtons.classList.remove('hidden');
       elements.waitingScreen.classList.add('hidden');
       elements.matchedScreen.classList.add('hidden');
-      
-      elements.findMatchBtn.classList.remove('hidden');
-      elements.disconnectBtn.classList.add('hidden');
-      elements.newMatchBtn.classList.add('hidden');
     }
 
     function showWaitingScreen() {
       elements.waitingScreen.classList.remove('hidden');
       elements.matchedScreen.classList.add('hidden');
-      
-      elements.findMatchBtn.classList.add('hidden');
-      elements.disconnectBtn.classList.remove('hidden');
-      elements.newMatchBtn.classList.add('hidden');
     }
 
     function showMatchedScreen() {
@@ -1746,10 +1669,6 @@
       elements.chatMessages.innerHTML = '';
       messageGroups = [];
       lastMessageSender = null;
-      
-      elements.findMatchBtn.classList.add('hidden');
-      elements.disconnectBtn.classList.remove('hidden');
-      elements.newMatchBtn.classList.remove('hidden');
       
       // Auto-resize textarea
       autoResizeTextarea();
