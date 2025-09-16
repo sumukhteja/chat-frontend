@@ -455,6 +455,68 @@
       word-wrap: break-word;
       position: relative;
       margin: 1px 0;
+      transition: transform 0.2s ease;
+      overflow: hidden;
+    }
+    
+    /* Swipe-to-Reply Functionality */
+    .message-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .message-swipe-area {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .message-swipe-area.left {
+      left: 10px;
+    }
+    
+    .message-swipe-area.right {
+      right: 10px;
+    }
+    
+    .reply-button, .react-button {
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s ease;
+    }
+    
+    .reply-button:hover, .react-button:hover {
+      background: #059669;
+      transform: scale(1.1);
+    }
+    
+    /* Message States */
+    .message.swiping-left {
+      transform: translateX(-50px);
+    }
+    
+    .message.swiping-right {
+      transform: translateX(50px);
+    }
+    
+    .message.swiping-left .message-swipe-area.left,
+    .message.swiping-right .message-swipe-area.right {
+      opacity: 1;
     }
     
     .message.own {
@@ -497,6 +559,166 @@
       color: #6b7280;
     }
     
+    /* Reply Preview Styles */
+    .reply-preview {
+      background: #f0f9ff;
+      border-left: 3px solid #10b981;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    .reply-preview-content {
+      flex: 1;
+    }
+    
+    .reply-preview-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: #10b981;
+      margin-bottom: 2px;
+    }
+    
+    .reply-preview-text {
+      font-size: 12px;
+      color: #6b7280;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+    
+    .reply-close-button {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      cursor: pointer;
+      padding: 2px;
+      font-size: 16px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    
+    /* Message Replies */
+    .message-reply {
+      background: #f9fafb;
+      border-left: 3px solid #10b981;
+      padding: 6px 8px;
+      margin-bottom: 6px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    
+    .message-reply-header {
+      font-weight: 600;
+      color: #10b981;
+      margin-bottom: 2px;
+    }
+    
+    .message-reply-text {
+      color: #6b7280;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    /* Message Reactions */
+    .message-reactions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+      min-height: 0;
+    }
+    
+    .reaction {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 2px 6px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .reaction:hover {
+      background: #f3f4f6;
+      border-color: #10b981;
+    }
+    
+    .reaction.own-reaction {
+      background: #dcf8c6;
+      border-color: #10b981;
+    }
+    
+    .reaction-emoji {
+      font-size: 12px;
+    }
+    
+    .reaction-count {
+      font-size: 10px;
+      font-weight: 500;
+      color: #6b7280;
+      min-width: 8px;
+    }
+    
+    /* Emoji Picker */
+    .emoji-picker {
+      position: absolute;
+      background: white;
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      display: none;
+      max-width: 280px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .emoji-picker.show {
+      display: block;
+    }
+    
+    .emoji-picker-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .emoji-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+    
+    .emoji-pick-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .emoji-pick-button:hover {
+      background: #f3f4f6;
+    }
+    
     /* Typing Indicator */
     .typing-indicator {
       padding: 12px 16px;
@@ -537,11 +759,14 @@
     .input-area {
       display: flex;
       align-items: flex-end;
-      padding: 16px;
+      padding: 12px;
       background: #ffffff;
       border-top: 1px solid #e5e7eb;
-      gap: 12px;
+      gap: 8px;
       flex-shrink: 0;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 56px;
     }
     
     .input-container {
@@ -551,10 +776,13 @@
       align-items: flex-end;
       background: #f3f4f6;
       border: 1px solid #e5e7eb;
-      border-radius: 24px;
-      padding: 8px 16px;
+      border-radius: 20px;
+      padding: 6px 12px;
       transition: all 0.2s ease;
-      max-height: 120px;
+      max-height: 100px;
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
     }
     
     .input-container:focus-within {
@@ -569,13 +797,19 @@
       font-size: 14px;
       background: transparent;
       resize: none;
-      min-height: 20px;
-      max-height: 100px;
+      min-height: 18px;
+      max-height: 80px;
       font-family: 'Inter', sans-serif;
-      line-height: 1.4;
+      line-height: 1.3;
       font-weight: 400;
       color: #1f2937;
-      padding: 8px 0;
+      padding: 6px 0;
+      width: 100%;
+      box-sizing: border-box;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      appearance: none;
+      -webkit-appearance: none;
     }
     
     .message-input::placeholder {
@@ -585,17 +819,19 @@
     .emoji-button {
       background: none;
       border: none;
-      font-size: 20px;
+      font-size: 16px;
       cursor: pointer;
-      padding: 4px;
-      margin-right: 8px;
+      padding: 2px;
+      margin-right: 4px;
       border-radius: 50%;
       transition: background-color 0.2s;
       flex-shrink: 0;
       align-self: flex-end;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       color: #6b7280;
       -webkit-tap-highlight-color: transparent;
+      width: 24px;
+      height: 24px;
     }
     
     .emoji-button:hover {
@@ -609,18 +845,21 @@
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
-      padding: 12px;
+      padding: 8px;
       border-radius: 50%;
       transition: all 0.2s ease;
       flex-shrink: 0;
       align-self: flex-end;
       font-family: 'Inter', sans-serif;
-      width: 44px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     
     .send-button:hover {
@@ -632,6 +871,31 @@
       background: #d1d5db;
       cursor: not-allowed;
       transform: none;
+    }
+    
+    /* Mobile Text Input Enhancements */
+    @media (max-width: 768px) {
+      .input-area {
+        overflow: hidden;
+      }
+      
+      .input-container {
+        overflow: hidden;
+      }
+      
+      .message-input {
+        overflow-y: auto;
+        overflow-x: hidden;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      
+      /* Prevent zoom on focus for iOS */
+      .message-input {
+        font-size: max(16px, 1rem);
+        -webkit-text-size-adjust: 100%;
+        zoom: 1;
+      }
     }
     
     /* Control Buttons - Hidden on Desktop, Integrated in Mobile */
@@ -986,8 +1250,12 @@
       }
       
       .emoji-button {
-        font-size: 18px;
-        padding: 8px;
+        font-size: 14px;
+        padding: 2px;
+        margin-right: 2px;
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
       }
       
       .typing-indicator {
@@ -1085,12 +1353,38 @@
       }
       
       .input-area {
-        padding: 12px 16px;
-        gap: 12px;
+        padding: 8px 12px;
+        gap: 8px;
         position: relative;
         bottom: 0;
         background: #ffffff;
         border-top: 1px solid #e5e7eb;
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 52px;
+      }
+      
+      .input-container {
+        flex: 1;
+        min-width: 0;
+        max-width: calc(100% - 44px);
+        padding: 4px 10px;
+        border-radius: 18px;
+      }
+      
+      .message-input {
+        font-size: 16px;
+        -webkit-text-size-adjust: 100%;
+        padding: 4px 0;
+      }
+      
+      .send-button {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        min-height: 32px;
+        padding: 6px;
+        font-size: 14px;
       }
       
       .chat-messages {
@@ -1107,10 +1401,35 @@
       }
       
       .input-area {
-        padding: 8px 12px;
-        gap: 8px;
+        padding: 6px 10px;
+        gap: 6px;
         position: relative;
-        bottom: 8px;
+        bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 48px;
+      }
+      
+      .input-container {
+        flex: 1;
+        min-width: 0;
+        max-width: calc(100% - 36px);
+        padding: 4px 8px;
+        border-radius: 16px;
+      }
+      
+      .message-input {
+        font-size: 16px;
+        padding: 4px 0;
+      }
+      
+      .send-button {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        min-height: 28px;
+        padding: 4px;
+        font-size: 12px;
       }
       
       .chat-header {
@@ -1529,6 +1848,14 @@
         
         <div class="typing-indicator" id="typingIndicator"></div>
         
+        <div class="reply-preview" id="replyPreview" style="display: none;">
+          <div class="reply-preview-content">
+            <div class="reply-preview-header" id="replyPreviewHeader">Replying to</div>
+            <div class="reply-preview-text" id="replyPreviewText"></div>
+          </div>
+          <button class="reply-close-button" onclick="cancelReply()">&times;</button>
+        </div>
+        
         <div class="input-area">
           <div class="input-container">
             <button class="emoji-button">😊</button>
@@ -1539,6 +1866,25 @@
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
             </svg>
           </button>
+        </div>
+        
+        <!-- Emoji Picker for Reactions -->
+        <div class="emoji-picker" id="emojiPicker">
+          <div class="emoji-picker-header">React with an emoji</div>
+          <div class="emoji-picker-grid">
+            <button class="emoji-pick-button" onclick="addReaction('❤️')">❤️</button>
+            <button class="emoji-pick-button" onclick="addReaction('😂')">😂</button>
+            <button class="emoji-pick-button" onclick="addReaction('😮')">😮</button>
+            <button class="emoji-pick-button" onclick="addReaction('😢')">😢</button>
+            <button class="emoji-pick-button" onclick="addReaction('😡')">😡</button>
+            <button class="emoji-pick-button" onclick="addReaction('👍')">👍</button>
+            <button class="emoji-pick-button" onclick="addReaction('👎')">👎</button>
+            <button class="emoji-pick-button" onclick="addReaction('😍')">😍</button>
+            <button class="emoji-pick-button" onclick="addReaction('🤔')">🤔</button>
+            <button class="emoji-pick-button" onclick="addReaction('😊')">😊</button>
+            <button class="emoji-pick-button" onclick="addReaction('🎉')">🎉</button>
+            <button class="emoji-pick-button" onclick="addReaction('🔥')">🔥</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1722,6 +2068,10 @@
           if (!data.fromMe && soundEnabled) playNotification();
           break;
           
+        case 'reaction':
+          handleReactionUpdate(data);
+          break;
+          
         case 'typing':
           if (data.typing) {
             elements.typingIndicator.innerHTML = `
@@ -1845,11 +2195,158 @@
       setTimeout(() => findMatch(), 500);
     }
 
+    // Reply functionality
+    let replyingTo = null;
+
+    function cancelReply() {
+      replyingTo = null;
+      document.getElementById('replyPreview').style.display = 'none';
+    }
+
+    function setReply(messageData) {
+      replyingTo = messageData;
+      const replyPreview = document.getElementById('replyPreview');
+      const replyHeader = document.getElementById('replyPreviewHeader');
+      const replyText = document.getElementById('replyPreviewText');
+      
+      replyHeader.textContent = messageData.fromMe ? 'Replying to yourself' : 'Replying to partner';
+      replyText.textContent = messageData.text;
+      replyPreview.style.display = 'flex';
+      
+      // Focus input
+      elements.messageInput.focus();
+    }
+
+    // Emoji reactions functionality
+    let currentReactionMessage = null;
+
+    function showEmojiPicker(messageElement, messageData) {
+      currentReactionMessage = { element: messageElement, data: messageData };
+      const picker = document.getElementById('emojiPicker');
+      const rect = messageElement.getBoundingClientRect();
+      
+      picker.style.display = 'block';
+      picker.style.position = 'fixed';
+      picker.style.top = `${Math.max(10, rect.top - picker.offsetHeight - 10)}px`;
+      picker.style.left = `${Math.min(window.innerWidth - 290, Math.max(10, rect.left))}px`;
+      
+      // Close picker when clicking outside
+      document.addEventListener('click', closeEmojiPickerOnOutsideClick);
+    }
+
+    function closeEmojiPickerOnOutsideClick(event) {
+      const picker = document.getElementById('emojiPicker');
+      if (!picker.contains(event.target)) {
+        picker.style.display = 'none';
+        document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
+        currentReactionMessage = null;
+      }
+    }
+
+    function addReaction(emoji) {
+      if (!currentReactionMessage || !ws || ws.readyState !== WebSocket.OPEN) return;
+      
+      // Send reaction to server
+      ws.send(JSON.stringify({
+        type: 'reaction',
+        messageId: currentReactionMessage.data.id,
+        emoji: emoji
+      }));
+      
+      // Hide picker
+      document.getElementById('emojiPicker').style.display = 'none';
+      currentReactionMessage = null;
+      document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
+    }
+
+    // Touch gesture handling for swipe-to-reply
+    function initializeSwipeGestures() {
+      let startX = 0;
+      let startY = 0;
+      let currentMessage = null;
+      let isSwipeActive = false;
+
+      document.getElementById('chatMessages').addEventListener('touchstart', function(e) {
+        const messageElement = e.target.closest('.message');
+        if (!messageElement) return;
+        
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        currentMessage = messageElement;
+        isSwipeActive = false;
+      });
+
+      document.getElementById('chatMessages').addEventListener('touchmove', function(e) {
+        if (!currentMessage) return;
+        
+        const deltaX = e.touches[0].clientX - startX;
+        const deltaY = e.touches[0].clientY - startY;
+        
+        // Only handle horizontal swipes
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+          return;
+        }
+        
+        e.preventDefault();
+        
+        if (Math.abs(deltaX) > 20) {
+          isSwipeActive = true;
+          
+          if (deltaX > 0 && deltaX < 80) {
+            // Swipe right (reveal reply on left side)
+            currentMessage.style.transform = `translateX(${Math.min(deltaX, 60)}px)`;
+            currentMessage.classList.add('swiping-right');
+            currentMessage.classList.remove('swiping-left');
+          } else if (deltaX < 0 && deltaX > -80) {
+            // Swipe left (reveal react on right side)
+            currentMessage.style.transform = `translateX(${Math.max(deltaX, -60)}px)`;
+            currentMessage.classList.add('swiping-left');
+            currentMessage.classList.remove('swiping-right');
+          }
+        }
+      });
+
+      document.getElementById('chatMessages').addEventListener('touchend', function(e) {
+        if (!currentMessage) return;
+        
+        const deltaX = e.changedTouches[0].clientX - startX;
+        
+        if (isSwipeActive && Math.abs(deltaX) > 40) {
+          if (deltaX > 0) {
+            // Swipe right - reply
+            const messageData = JSON.parse(currentMessage.dataset.messageData || '{}');
+            setReply(messageData);
+          } else {
+            // Swipe left - react
+            const messageData = JSON.parse(currentMessage.dataset.messageData || '{}');
+            showEmojiPicker(currentMessage, messageData);
+          }
+        }
+        
+        // Reset message position
+        currentMessage.style.transform = '';
+        currentMessage.classList.remove('swiping-left', 'swiping-right');
+        currentMessage = null;
+        isSwipeActive = false;
+      });
+    }
+
     function sendMessage() {
       const text = elements.messageInput.value.trim();
       if (!text || !ws || ws.readyState !== WebSocket.OPEN || currentState !== 'matched') return;
       
-      ws.send(JSON.stringify({ type: 'message', text }));
+      const messageData = {
+        type: 'message',
+        text: text
+      };
+      
+      // Add reply data if replying
+      if (replyingTo) {
+        messageData.replyTo = replyingTo;
+        cancelReply(); // Clear reply after sending
+      }
+      
+      ws.send(JSON.stringify(messageData));
       elements.messageInput.value = '';
       elements.messageInput.style.height = '20px';
       elements.sendBtn.disabled = true;
@@ -1876,11 +2373,68 @@
       const messageDiv = document.createElement('div');
       messageDiv.className = `message ${isOwn ? 'own' : 'other'}`;
       
-      messageDiv.innerHTML = `
-        <div class="message-bubble">
-          <div class="message-text">${escapeHtml(data.text)}</div>
+      // Generate unique message ID if not provided
+      if (!data.id) {
+        data.id = 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+      
+      // Store message data for gestures
+      messageDiv.dataset.messageData = JSON.stringify(data);
+      
+      let messageHTML = '<div class="message-container">';
+      
+      // Add swipe areas
+      messageHTML += `
+        <div class="message-swipe-area left">
+          <button class="reply-button" onclick="setReply(${escapeHtml(JSON.stringify(data))})">↩</button>
+        </div>
+        <div class="message-swipe-area right">
+          <button class="react-button" onclick="showEmojiPicker(this.closest('.message'), ${escapeHtml(JSON.stringify(data))})">😊</button>
         </div>
       `;
+      
+      messageHTML += '<div class="message-bubble">';
+      
+      // Add reply reference if this is a reply
+      if (data.replyTo) {
+        messageHTML += `
+          <div class="message-reply">
+            <div class="message-reply-header">${data.replyTo.fromMe ? 'You' : 'Partner'}</div>
+            <div class="message-reply-text">${escapeHtml(data.replyTo.text)}</div>
+          </div>
+        `;
+      }
+      
+      messageHTML += `<div class="message-text">${escapeHtml(data.text)}</div>`;
+      
+      // Add reactions if any
+      if (data.reactions && data.reactions.length > 0) {
+        messageHTML += '<div class="message-reactions">';
+        const reactionCounts = {};
+        
+        data.reactions.forEach(reaction => {
+          reactionCounts[reaction.emoji] = reactionCounts[reaction.emoji] || { count: 0, hasOwn: false };
+          reactionCounts[reaction.emoji].count++;
+          if (reaction.fromMe) {
+            reactionCounts[reaction.emoji].hasOwn = true;
+          }
+        });
+        
+        Object.entries(reactionCounts).forEach(([emoji, info]) => {
+          messageHTML += `
+            <div class="reaction ${info.hasOwn ? 'own-reaction' : ''}" onclick="addReaction('${emoji}')">
+              <span class="reaction-emoji">${emoji}</span>
+              <span class="reaction-count">${info.count}</span>
+            </div>
+          `;
+        });
+        
+        messageHTML += '</div>';
+      }
+      
+      messageHTML += '</div></div>'; // Close message-bubble and message-container
+      
+      messageDiv.innerHTML = messageHTML;
       
       // Add to current message group
       const currentGroup = elements.chatMessages.lastElementChild;
@@ -1893,6 +2447,59 @@
       const groupDiv = document.createElement('div');
       groupDiv.className = `message-group ${isOwn ? 'own' : 'other'}`;
       elements.chatMessages.appendChild(groupDiv);
+    }
+
+    function handleReactionUpdate(data) {
+      // Find the message element by ID
+      const messageElements = document.querySelectorAll('.message');
+      for (let messageElement of messageElements) {
+        const messageData = JSON.parse(messageElement.dataset.messageData || '{}');
+        if (messageData.id === data.messageId) {
+          // Update the message data with new reactions
+          messageData.reactions = data.reactions;
+          messageElement.dataset.messageData = JSON.stringify(messageData);
+          
+          // Find and update the reactions display
+          const messageBubble = messageElement.querySelector('.message-bubble');
+          let reactionsContainer = messageBubble.querySelector('.message-reactions');
+          
+          if (data.reactions && data.reactions.length > 0) {
+            // Create or update reactions container
+            if (!reactionsContainer) {
+              reactionsContainer = document.createElement('div');
+              reactionsContainer.className = 'message-reactions';
+              messageBubble.appendChild(reactionsContainer);
+            }
+            
+            // Rebuild reactions display
+            const reactionCounts = {};
+            data.reactions.forEach(reaction => {
+              reactionCounts[reaction.emoji] = reactionCounts[reaction.emoji] || { count: 0, hasOwn: false };
+              reactionCounts[reaction.emoji].count++;
+              if (reaction.fromMe) {
+                reactionCounts[reaction.emoji].hasOwn = true;
+              }
+            });
+            
+            let reactionsHTML = '';
+            Object.entries(reactionCounts).forEach(([emoji, info]) => {
+              reactionsHTML += `
+                <div class="reaction ${info.hasOwn ? 'own-reaction' : ''}" onclick="addReaction('${emoji}')">
+                  <span class="reaction-emoji">${emoji}</span>
+                  <span class="reaction-count">${info.count}</span>
+                </div>
+              `;
+            });
+            
+            reactionsContainer.innerHTML = reactionsHTML;
+          } else if (reactionsContainer) {
+            // Remove reactions container if no reactions
+            reactionsContainer.remove();
+          }
+          
+          break;
+        }
+      }
     }
 
     function showDisconnectedMessage(message) {
@@ -2373,6 +2980,9 @@
       clearTimeout(typingTimeout);
       typingTimeout = setTimeout(() => sendTyping(false), 1000);
     });
+
+    // Initialize swipe gestures
+    initializeSwipeGestures();
 
     // Initialize connection
     connect();
