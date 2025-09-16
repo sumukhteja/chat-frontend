@@ -55,32 +55,6 @@
       border-radius: 15px;
       position: relative;
     }
-    .header {
-      background: linear-gradient(135deg, #222222 0%, #1a1a1a 100%);
-      color: white;
-      padding: 15px 20px;
-      text-align: center;
-      position: relative;
-      border-bottom: 1px solid #e5e5e5;
-      border-radius: 12px 12px 0 0;
-    }
-    .header h2 { 
-      margin-bottom: 5px; 
-      font-size: 1.5em;
-      font-weight: 600;
-    }
-    .connection-status {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #00ff00; /* Green for connected */
-    }
-    .connection-status.disconnected { 
-      background: #ff0000; /* Red for disconnected */
-    }
     
     .profile-setup {
       padding: 20px;
@@ -270,9 +244,10 @@
     .voice-btn {
       background: none;
       border: 2px solid #222222;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      border-radius: 8px;
+      padding: 8px 12px;
+      min-width: 45px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -540,6 +515,30 @@
       background: #f0f0f0;
     }
     
+    /* Chat Control Buttons at Top */
+    .chat-control-buttons {
+      display: flex;
+      gap: 8px;
+      padding: 10px 15px;
+      background: #f8f8f8;
+      border-bottom: 1px solid #e5e5e5;
+      flex-shrink: 0;
+    }
+    
+    .chat-control-buttons .control-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      font-family: 'Sour Gummy', sans-serif;
+      transition: all 0.2s;
+      min-height: 36px;
+      font-size: 14px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
     /* Control Buttons */
     .control-buttons {
       display: flex;
@@ -774,6 +773,23 @@
         z-index: 100;
       }
       
+      /* Hide the original control buttons on mobile since we have them in chat */
+      .control-buttons {
+        display: none !important;
+      }
+      
+      /* Style the chat control buttons for mobile */
+      .chat-control-buttons {
+        padding: 12px 15px;
+        gap: 10px;
+      }
+      
+      .chat-control-buttons .control-btn {
+        padding: 12px 15px;
+        min-height: 44px;
+        font-size: 15px;
+      }
+      
       .control-btn {
         padding: 20px 15px;
         min-height: 60px;
@@ -800,9 +816,10 @@
       }
       
       .voice-btn {
-        width: 56px;
-        height: 56px;
+        min-width: 56px;
+        height: 48px;
         font-size: 20px;
+        border-radius: 8px;
       }
       
       /* Improve input area for mobile */
@@ -955,15 +972,10 @@
     <!-- Picture Section (70% width) -->
     <!-- Chat Container (30% width) -->
     <div class="chat-container">
-    <div class="header">
-      <div class="connection-status" id="connectionStatus"></div>
-      <h2>Random Chat</h2>
-      <div id="serverInfo">Connecting...</div>
-    </div>
     
     <!-- Profile Setup Screen -->
     <div class="profile-setup" id="profileSetup">
-      <h3>Create Profile</h3>
+      <h3>Enter Details</h3>
       <div class="form-group">
         <label>Username:</label>
         <input id="usernameInput" placeholder="Enter your username..." maxlength="20" />
@@ -1001,11 +1013,14 @@
       
       <!-- Matched Screen -->
       <div class="matched-screen hidden" id="matchedScreen">
-        <div class="match-info">
-          <p id="matchInfo">Connected with: <span id="partnerName"></span></p>
-        </div>
         
         <div class="chat-area">
+          <!-- Control Buttons at Top of Chat -->
+          <div class="chat-control-buttons" id="chatControlButtons">
+            <button class="control-btn disconnect-btn hidden" id="disconnectBtn" onclick="disconnect()">Disconnect</button>
+            <button class="control-btn new-match-btn hidden" id="newMatchBtn" onclick="findNewMatch()">New Match</button>
+          </div>
+          
           <!-- Chat Header -->
           <div class="chat-header">
             <div class="partner-avatar" id="partnerAvatar">?</div>
@@ -1014,7 +1029,7 @@
               <p id="partnerStatus">Online</p>
             </div>
             <div class="voice-controls">
-              <button class="voice-btn" id="startCallBtn" onclick="startVoiceCall()" title="Start Voice Call">🎤</button>
+              <button class="voice-btn" id="startCallBtn" onclick="startVoiceCall()" title="Start Voice Call">📞</button>
               <button class="voice-btn hidden" id="endCallBtn" onclick="endVoiceCall()" title="End Call">📞</button>
               <button class="voice-btn hidden" id="muteBtn" onclick="toggleMute()" title="Mute/Unmute">🔇</button>
             </div>
@@ -1647,7 +1662,7 @@
       hideCallScreen();
       
       // Reset call button
-      elements.startCallBtn.textContent = '🎤';
+      elements.startCallBtn.textContent = '📞';
       elements.startCallBtn.disabled = false;
       
       // Add call ended message to chat if call was active
@@ -1760,7 +1775,7 @@
         } else if (data.signalType === 'call-declined') {
           // Call was declined
           callState = 'idle';
-          elements.startCallBtn.textContent = '🎤';
+          elements.startCallBtn.textContent = '📞';
           elements.startCallBtn.disabled = false;
           addSystemMessage('📞 Call declined');
           
