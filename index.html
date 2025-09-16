@@ -17,6 +17,9 @@
       padding: 0;
       margin: 0;
       color: #ffffff;
+      overflow: hidden;
+      /* Prevent zoom on input focus on iOS */
+      -webkit-text-size-adjust: 100%;
     }
     .main-container {
       display: flex;
@@ -49,8 +52,8 @@
       flex-direction: column;
       overflow: hidden;
       box-shadow: 0 10px 50px rgba(0,0,0,0.3);
-      border: 1px solid #e5e5e5;
-      border-radius: 12px;
+      border-radius: 15px;
+      position: relative;
     }
     .header {
       background: linear-gradient(135deg, #222222 0%, #1a1a1a 100%);
@@ -92,12 +95,18 @@
     .form-group label { display: block; margin-bottom: 5px; font-weight: 500; color: #333333; }
     .form-group input, .form-group select {
       width: 100%;
-      padding: 12px;
+      padding: 15px 12px;
       border: 2px solid #e5e5e5;
       border-radius: 8px;
       font-size: 16px;
       font-family: 'Sour Gummy', sans-serif;
       transition: border-color 0.2s;
+      background: white;
+      -webkit-appearance: none;
+      appearance: none;
+      /* Prevent zoom on iOS */
+      font-size: 16px;
+      min-height: 50px;
     }
     .form-group input:focus {
       outline: none;
@@ -110,7 +119,7 @@
     }
     .gender-btn {
       flex: 1;
-      padding: 12px;
+      padding: 15px 12px;
       border: 2px solid #e5e5e5;
       background: white;
       border-radius: 8px;
@@ -119,6 +128,10 @@
       font-family: 'Sour Gummy', sans-serif;
       font-weight: 500;
       color: #333333;
+      min-height: 50px;
+      font-size: 16px;
+      /* Better touch targets */
+      -webkit-tap-highlight-color: transparent;
     }
     .gender-btn.selected {
       background: #222222;
@@ -127,7 +140,7 @@
     }
     .start-btn {
       width: 100%;
-      padding: 15px;
+      padding: 18px 15px;
       background: #222222;
       color: white;
       border: none;
@@ -138,6 +151,8 @@
       margin-top: 20px;
       font-family: 'Sour Gummy', sans-serif;
       transition: background-color 0.2s;
+      min-height: 54px;
+      -webkit-tap-highlight-color: transparent;
     }
     .start-btn:hover {
       background: #1a1a1a;
@@ -256,14 +271,15 @@
       background: none;
       border: 2px solid #222222;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
+      width: 50px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 18px;
       transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
     .voice-btn:hover {
       background: #f0f0f0;
@@ -481,15 +497,18 @@
       border: none;
       color: #222222;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
-      padding: 8px;
+      padding: 12px;
       border-radius: 50%;
       transition: background-color 0.2s;
       flex-shrink: 0; /* Prevent button from shrinking */
       align-self: flex-end; /* Keep button at bottom */
       margin-bottom: 4px; /* Small margin to align with text baseline */
       font-family: 'Sour Gummy', sans-serif;
+      min-height: 50px;
+      min-width: 50px;
+      -webkit-tap-highlight-color: transparent;
     }
     .send-button:hover {
       background: #f0f0f0;
@@ -504,15 +523,18 @@
     .emoji-button, .attach-button {
       background: none;
       border: none;
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
-      padding: 4px;
+      padding: 12px;
       margin-right: 8px;
       border-radius: 50%;
       transition: background-color 0.2s;
       flex-shrink: 0; /* Prevent buttons from shrinking */
       align-self: flex-end; /* Keep buttons at bottom */
       margin-bottom: 4px; /* Small margin to align with text baseline */
+      min-height: 50px;
+      min-width: 50px;
+      -webkit-tap-highlight-color: transparent;
     }
     .emoji-button:hover, .attach-button:hover {
       background: #f0f0f0;
@@ -527,13 +549,16 @@
     }
     .control-btn {
       flex: 1;
-      padding: 12px;
+      padding: 15px 12px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       font-family: 'Sour Gummy', sans-serif;
       transition: all 0.2s;
+      min-height: 50px;
+      font-size: 16px;
+      -webkit-tap-highlight-color: transparent;
     }
     .find-match-btn {
       background: #222222;
@@ -647,6 +672,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      -webkit-tap-highlight-color: transparent;
     }
     
     .mute-btn {
@@ -700,6 +726,61 @@
         width: 60px;
         height: 60px;
         font-size: 24px;
+      }
+      
+      /* Improve touch targets for mobile */
+      .gender-btn {
+        padding: 18px 12px;
+        min-height: 60px;
+      }
+      
+      .start-btn {
+        padding: 20px 15px;
+        min-height: 60px;
+      }
+      
+      .control-btn {
+        padding: 18px 12px;
+        min-height: 60px;
+      }
+      
+      .voice-controls {
+        gap: 12px;
+      }
+      
+      .voice-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 20px;
+      }
+      
+      /* Improve input area for mobile */
+      .message-input-container {
+        padding: 15px;
+        gap: 12px;
+      }
+      
+      .message-input {
+        min-height: 60px;
+        padding: 15px;
+        font-size: 16px;
+      }
+      
+      .send-button, .emoji-button, .attach-button {
+        min-width: 56px;
+        min-height: 56px;
+        padding: 16px;
+      }
+      
+      /* Improve incoming call buttons for mobile */
+      .incoming-call-controls {
+        gap: 60px;
+      }
+      
+      .incoming-call-btn {
+        width: 90px;
+        height: 90px;
+        font-size: 40px;
       }
     }
     
@@ -776,6 +857,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      -webkit-tap-highlight-color: transparent;
     }
     
     .decline-btn {
@@ -1013,7 +1095,7 @@
     };
 
     function connect() {
-      ws = new WebSocket('wss://chat-backend-4tpa.onrender.com');
+      ws = new WebSocket('ws://localhost:8081');
       
       ws.onopen = () => {
         elements.connectionStatus.classList.remove('disconnected');
@@ -1686,4 +1768,3 @@
   </script>
 </body>
 </html>
-
