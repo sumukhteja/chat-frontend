@@ -1158,8 +1158,6 @@
       findMatchBtn: document.getElementById('findMatchBtn'),
       disconnectBtn: document.getElementById('disconnectBtn'),
       newMatchBtn: document.getElementById('newMatchBtn'),
-      connectionStatus: document.getElementById('connectionStatus'),
-      serverInfo: document.getElementById('serverInfo'),
       partnerName: document.getElementById('partnerName'),
       partnerNameHeader: document.getElementById('partnerNameHeader'),
       partnerAvatar: document.getElementById('partnerAvatar'),
@@ -1188,8 +1186,6 @@
       ws = new WebSocket('wss://chat-backend-4tpa.onrender.com');
       
       ws.onopen = () => {
-        elements.connectionStatus.classList.remove('disconnected');
-        elements.serverInfo.textContent = 'Connected';
         if (reconnectInterval) {
           clearInterval(reconnectInterval);
           reconnectInterval = null;
@@ -1197,16 +1193,13 @@
       };
 
       ws.onclose = () => {
-        elements.connectionStatus.classList.add('disconnected');
-        elements.serverInfo.textContent = 'Disconnected - Reconnecting...';
         if (!reconnectInterval) {
           reconnectInterval = setInterval(connect, 3000);
         }
       };
 
       ws.onerror = () => {
-        elements.connectionStatus.classList.add('disconnected');
-        elements.serverInfo.textContent = 'Connection Error';
+        // Connection error handling
       };
 
       ws.onmessage = handleMessage;
@@ -1236,7 +1229,6 @@
         case 'matched':
           currentState = 'matched';
           partnerInfo = data.partner;
-          elements.partnerName.textContent = `${data.partner.username} (${data.partner.gender})`;
           elements.partnerNameHeader.textContent = data.partner.username;
           elements.partnerAvatar.textContent = data.partner.username[0].toUpperCase();
           elements.partnerStatus.textContent = 'Online';
