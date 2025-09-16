@@ -752,9 +752,32 @@
         min-height: 60px;
       }
       
+      /* Fix control buttons for mobile - ensure proper visibility */
+      .control-buttons {
+        padding: 20px 15px;
+        gap: 12px;
+        display: flex !important;
+      }
+      
       .control-btn {
-        padding: 18px 12px;
+        padding: 20px 15px;
         min-height: 60px;
+        font-size: 16px;
+        font-weight: 600;
+        display: block;
+      }
+      
+      /* Override hidden class specifically for mobile buttons when they should be visible */
+      .control-buttons .find-match-btn:not(.hidden) {
+        display: block !important;
+      }
+      
+      .control-buttons .disconnect-btn:not(.hidden) {
+        display: block !important;
+      }
+      
+      .control-buttons .new-match-btn:not(.hidden) {
+        display: block !important;
       }
       
       .voice-controls {
@@ -768,7 +791,7 @@
       }
       
       /* Improve input area for mobile */
-      .message-input-container {
+      .input-area {
         padding: 15px;
         gap: 12px;
       }
@@ -794,6 +817,22 @@
         width: 90px;
         height: 90px;
         font-size: 40px;
+      }
+      
+      /* Fix stats panel for mobile */
+      .stats-panel {
+        padding: 12px 15px;
+        font-size: 14px;
+      }
+      
+      /* Ensure main screen shows properly on mobile */
+      .main-screen {
+        min-height: auto;
+      }
+      
+      /* Make sure control buttons container is always visible when needed */
+      .control-buttons:not(.hidden) {
+        display: flex !important;
       }
     }
     
