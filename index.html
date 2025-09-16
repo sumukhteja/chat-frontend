@@ -575,47 +575,6 @@
       display: none;
     }
     
-    /* Chat Menu Dropdown */
-    .chat-menu {
-      position: absolute;
-      top: 70px;
-      right: 16px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      z-index: 100;
-      min-width: 140px;
-      overflow: hidden;
-    }
-    
-    .menu-item {
-      width: 100%;
-      padding: 12px 16px;
-      border: none;
-      background: none;
-      text-align: left;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: #374151;
-      transition: background-color 0.2s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    .menu-item:hover {
-      background: #f3f4f6;
-    }
-    
-    .menu-item.disconnect {
-      color: #ef4444;
-    }
-    
-    .menu-item.disconnect:hover {
-      background: #fef2f2;
-    }
-    
     .hidden { 
       display: none !important; 
     }
@@ -1484,14 +1443,7 @@
             <button class="voice-btn" id="startCallBtn" onclick="startVoiceCall()" title="Start Voice Call">📞</button>
             <button class="voice-btn hidden" id="endCallBtn" onclick="endVoiceCall()" title="End Call">📞</button>
             <button class="voice-btn hidden" id="muteBtn" onclick="toggleMute()" title="Mute/Unmute">🔇</button>
-            <button class="voice-btn" id="menuBtn" onclick="toggleMenu()" title="Menu">⋮</button>
           </div>
-        </div>
-        
-        <!-- Menu Dropdown -->
-        <div class="chat-menu hidden" id="chatMenu">
-          <button class="menu-item" onclick="findNewMatch()">New Match</button>
-          <button class="menu-item disconnect" onclick="disconnect()">Disconnect</button>
         </div>
         
         <div class="chat-messages" id="chatMessages"></div>
@@ -2347,29 +2299,6 @@
         minute: '2-digit',
         hour12: true 
       });
-    }
-
-    // Menu Toggle Function
-    function toggleMenu() {
-      const menu = document.getElementById('chatMenu');
-      menu.classList.toggle('hidden');
-      
-      // Close menu when clicking outside
-      if (!menu.classList.contains('hidden')) {
-        document.addEventListener('click', closeMenuOnClickOutside);
-      } else {
-        document.removeEventListener('click', closeMenuOnClickOutside);
-      }
-    }
-    
-    function closeMenuOnClickOutside(event) {
-      const menu = document.getElementById('chatMenu');
-      const menuBtn = document.getElementById('menuBtn');
-      
-      if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
-        menu.classList.add('hidden');
-        document.removeEventListener('click', closeMenuOnClickOutside);
-      }
     }
 
     // Event listeners
