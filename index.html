@@ -1013,7 +1013,7 @@
     };
 
     function connect() {
-      ws = new WebSocket('ws://localhost:8081');
+      ws = new WebSocket('wss://chat-backend-4tpa.onrender.com');
       
       ws.onopen = () => {
         elements.connectionStatus.classList.remove('disconnected');
@@ -1686,3 +1686,4 @@
   </script>
 </body>
 </html>
+
