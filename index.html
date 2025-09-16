@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Chat</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400&display=swap');
+    body { 
+      font-family: 'Sour Gummy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      background: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 0;
+      margin: 0;
+      color: #ffffff;
+    }
+    .main-container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background: #000000;
+    }
+    .decorative-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: none; /* Hide decorative elements */
+    }
+    /* Decorative circles and animations - DISABLED */
+    .decorative-circle {
+      display: none;
+    }
+    @keyframes float {
+      /* Animation disabled */
+    }
+    .chat-container {
+      background: #e2e2e2;
+      width: 500px;
+      max-width: 90vw;
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+    }
+    .header {
+      background: linear-gradient(135deg, #222222 0%, #1a1a1a 100%);
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid #e5e5e5;
+      border-radius: 12px 12px 0 0;
+    }
+    .header h2 { 
+      margin-bottom: 5px; 
+      font-size: 1.5em;
+      font-weight: 600;
+    }
+    .connection-status {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff00; /* Green for connected */
+    }
+    .connection-status.disconnected { 
+      background: #ff0000; /* Red for disconnected */
+    }
+    
+    .profile-setup {
+      padding: 20px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .profile-setup h3 { margin-bottom: 20px; color: #222222; font-weight: 600; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 500; color: #333333; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e5e5;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Sour Gummy', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #222222;
+    }
+    .gender-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .gender-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e5e5e5;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Sour Gummy', sans-serif;
+      font-weight: 500;
+      color: #333333;
+    }
+    .gender-btn.selected {
+      background: #222222;
+      color: white;
+      border-color: #222222;
+    }
+    .start-btn {
+      width: 100%;
+      padding: 15px;
+      background: #222222;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      font-family: 'Sour Gummy', sans-serif;
+      transition: background-color 0.2s;
+    }
+    .start-btn:hover {
+      background: #1a1a1a;
+    }
+    .start-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .stats-panel {
+      background: #f8f8f8;
+      padding: 15px 20px;
+      border-bottom: 1px solid #e5e5e5;
+      font-size: 14px;
+      color: #666666;
+    }
+    .stats-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .stats-label { font-weight: 600; color: #222222; }
+    
+    .main-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0; /* Critical for flex shrinking */
+      overflow: hidden; /* Prevent any expansion */
+    }
+    .waiting-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .matched-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0; /* Critical for flex shrinking */
+      overflow: hidden; /* Prevent expansion */
+    }
+    .waiting-screen h3 { color: #222222; margin-bottom: 20px; font-weight: 600; }
+    .waiting-screen p { color: #222222; }
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #222222;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    .match-info {
+      background: #f8f8f8;
+      padding: 15px 20px;
+      border-radius: 0;
+      margin: 0;
+      border-bottom: 1px solid #e5e5e5;
+      flex-shrink: 0; /* Prevent from shrinking */
+    }
+    .match-info h4 { color: #222222; margin-bottom: 10px; font-weight: 600; }
+    .match-info p { color: #222222; }
+    
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #e2e2e2;
+      height: 100%;
+      min-height: 0; /* Important for flex child to shrink */
+      overflow: hidden; /* Prevent expansion beyond bounds */
+    }
+    .chat-header {
+      background: #e2e2e2;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      flex-shrink: 0; /* Prevent from shrinking */
+    }
+    .partner-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #222222 0%, #333333 50%, #222222 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      margin-right: 12px;
+    }
+    .partner-info h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #262626;
+    }
+    .partner-info p {
+      margin: 0;
+      font-size: 12px;
+      color: #8e8e8e;
+    }
+    .voice-controls {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .voice-btn {
+      background: none;
+      border: 2px solid #222222;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .voice-btn:hover {
+      background: #f0f0f0;
+    }
+    .voice-btn.active {
+      background: #222222;
+      color: white;
+    }
+    .voice-btn.calling {
+      background: #4CAF50;
+      border-color: #4CAF50;
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
+      background: #e2e2e2;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0; /* Important for flex child to shrink */
+      max-height: 100%; /* Prevent growing beyond container */
+      position: relative; /* Establish stacking context */
+      /* Custom scrollbar styling */
+      scrollbar-width: thin;
+      scrollbar-color: #c1c1c1 #f8f8f8;
+    }
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+      background: #f8f8f8;
+      border-radius: 3px;
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+      background-color: #c1c1c1;
+      border-radius: 3px;
+      border: 1px solid #f8f8f8;
+    }
+    .chat-messages::-webkit-scrollbar-thumb:hover {
+      background-color: #a1a1a1;
+    }
+    .chat-messages::-webkit-scrollbar-corner {
+      background: #f8f8f8;
+    }
+    .message {
+      max-width: 75%;
+      word-wrap: break-word;
+      position: relative;
+      margin: 4px 0;
+    }
+    .message.own {
+      align-self: flex-end;
+    }
+    .message.other {
+      align-self: flex-start;
+    }
+    .message-bubble {
+      padding: 8px 16px;
+      border-radius: 22px;
+      position: relative;
+    }
+    .message.own .message-bubble {
+      background: #222222;
+      color: white;
+    }
+    .message.other .message-bubble {
+      background: #f1f1f1;
+      color: #222222;
+      border: 1px solid #e5e5e5;
+    }
+    .message-text {
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      font-weight: 400;
+    }
+    .message-time {
+      font-size: 11px;
+      opacity: 0.6;
+      margin-top: 4px;
+      text-align: center;
+    }
+    .message.own .message-time {
+      color: #222222;
+    }
+    .message.other .message-time {
+      color: #222222;
+    }
+    .message-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;
+      flex-shrink: 0; /* Prevent message groups from shrinking */
+    }
+    .message-group.own {
+      align-items: flex-end;
+    }
+    .message-group.other {
+      align-items: flex-start;
+    }
+    .message-group .message {
+      margin: 1px 0;
+    }
+    .message-group .message:first-child .message-bubble {
+      border-radius: 22px;
+    }
+    .message-group .message:not(:first-child):not(:last-child) .message-bubble {
+      border-radius: 22px;
+    }
+    .message-group .message:last-child .message-bubble {
+      border-radius: 22px;
+    }
+    .message-group.own .message:first-child .message-bubble {
+      border-bottom-right-radius: 8px;
+    }
+    .message-group.own .message:not(:first-child):not(:last-child) .message-bubble {
+      border-radius: 22px 8px 8px 22px;
+    }
+    .message-group.own .message:last-child .message-bubble {
+      border-top-right-radius: 8px;
+    }
+    .message-group.other .message:first-child .message-bubble {
+      border-bottom-left-radius: 8px;
+    }
+    .message-group.other .message:not(:first-child):not(:last-child) .message-bubble {
+      border-radius: 8px 22px 22px 8px;
+    }
+    .message-group.other .message:last-child .message-bubble {
+      border-top-left-radius: 8px;
+    }
+    
+    .typing-indicator {
+      padding: 8px 16px;
+      font-style: italic;
+      color: #999999;
+      background: #e2e2e2;
+      border-top: 1px solid #e5e5e5;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      flex-shrink: 0; /* Prevent from shrinking */
+    }
+    .typing-dots {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: 8px;
+    }
+    .typing-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #999999;
+      animation: typing-bounce 1.4s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing-bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-8px); }
+    }
+    .input-area {
+      display: flex;
+      align-items: flex-end; /* Changed from center to flex-end */
+      padding: 12px 16px;
+      background: #e2e2e2;
+      border-top: 1px solid #e5e5e5;
+      gap: 12px;
+      flex-shrink: 0; /* Prevent input area from shrinking */
+    }
+    .input-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: flex-end; /* Changed from center to flex-end */
+      background: #e2e2e2;
+      border: 2px solid #e5e5e5;
+      border-radius: 22px;
+      padding: 8px 16px;
+      transition: border-color 0.2s;
+      max-height: 120px; /* Limit max height */
+    }
+    .input-container:focus-within {
+      border-color: #222222;
+      box-shadow: 0 0 0 1px #222222;
+    }
+    .message-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      background: #e2e2e2;
+      resize: none;
+      min-height: 20px;
+      max-height: 100px;
+      font-family: 'Sour Gummy', sans-serif;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+    .message-input::placeholder {
+      color: #999999;
+    }
+    .send-button {
+      background: none;
+      border: none;
+      color: #222222;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+      flex-shrink: 0; /* Prevent button from shrinking */
+      align-self: flex-end; /* Keep button at bottom */
+      margin-bottom: 4px; /* Small margin to align with text baseline */
+      font-family: 'Sour Gummy', sans-serif;
+    }
+    .send-button:hover {
+      background: #f0f0f0;
+    }
+    .send-button:disabled {
+      color: #cccccc;
+      cursor: not-allowed;
+    }
+    .send-button:disabled:hover {
+      background: none;
+    }
+    .emoji-button, .attach-button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      margin-right: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+      flex-shrink: 0; /* Prevent buttons from shrinking */
+      align-self: flex-end; /* Keep buttons at bottom */
+      margin-bottom: 4px; /* Small margin to align with text baseline */
+    }
+    .emoji-button:hover, .attach-button:hover {
+      background: #f0f0f0;
+    }
+    
+    .control-buttons {
+      display: flex;
+      gap: 8px;
+      padding: 15px;
+      background: #f8f8f8;
+      border-top: 1px solid #e5e5e5;
+    }
+    .control-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Sour Gummy', sans-serif;
+      transition: all 0.2s;
+    }
+    .find-match-btn {
+      background: #222222;
+      color: white;
+    }
+    .find-match-btn:hover {
+      background: #1a1a1a;
+    }
+    .disconnect-btn {
+      background: #666666;
+      color: white;
+    }
+    .disconnect-btn:hover {
+      background: #808080;
+    }
+    .new-match-btn {
+      background: #333333;
+      color: white;
+    }
+    .new-match-btn:hover {
+      background: #4d4d4d;
+    }
+    
+    .hidden { display: none !important; }
+    
+    /* Call Screen Styles */
+    .call-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .call-container {
+      text-align: center;
+      color: white;
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .call-header {
+      margin-bottom: 40px;
+    }
+    
+    .call-status {
+      font-size: 18px;
+      color: #b0b0b0;
+      margin-bottom: 10px;
+    }
+    
+    .call-timer {
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .call-avatar {
+      margin-bottom: 50px;
+    }
+    
+    .avatar-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: #4a4a4a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      border: 4px solid #666;
+    }
+    
+    .avatar-circle span {
+      font-size: 60px;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .call-partner-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    
+    .call-connection-status {
+      font-size: 16px;
+      color: #b0b0b0;
+    }
+    
+    .call-controls {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+    
+    .call-control-btn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      font-size: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .mute-btn {
+      background: #4a4a4a;
+      color: white;
+    }
+    
+    .mute-btn:hover {
+      background: #5a5a5a;
+    }
+    
+    .mute-btn.muted {
+      background: #ff4444;
+    }
+    
+    .end-call-btn {
+      background: #ff4444;
+      color: white;
+    }
+    
+    .end-call-btn:hover {
+      background: #ff6666;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .chat-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+      }
+      
+      .call-container {
+        width: 95%;
+      }
+      
+      .avatar-circle {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .avatar-circle span {
+        font-size: 48px;
+      }
+      
+      .call-timer {
+        font-size: 28px;
+      }
+      
+      .call-control-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+      }
+    }
+    
+    /* Incoming Call Styles */
+    .incoming-call {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .incoming-call-container {
+      text-align: center;
+      color: white;
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .incoming-call-header {
+      margin-bottom: 40px;
+    }
+    
+    .incoming-call-title {
+      font-size: 20px;
+      color: #ecf0f1;
+      margin-bottom: 15px;
+    }
+    
+    .ringing-animation {
+      font-size: 40px;
+      animation: ring 1s infinite;
+    }
+    
+    @keyframes ring {
+      0%, 100% { transform: rotate(-15deg); }
+      50% { transform: rotate(15deg); }
+    }
+    
+    .incoming-call-avatar {
+      margin-bottom: 50px;
+    }
+    
+    .incoming-call-partner-name {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    
+    .incoming-call-status {
+      font-size: 18px;
+      color: #bdc3c7;
+    }
+    
+    .incoming-call-controls {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+    }
+    
+    .incoming-call-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: none;
+      font-size: 35px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .decline-btn {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .decline-btn:hover {
+      background: #c0392b;
+      transform: scale(1.1);
+    }
+    
+    .answer-btn {
+      background: #27ae60;
+      color: white;
+    }
+    
+    .answer-btn:hover {
+      background: #229954;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <!-- Picture Section (70% width) -->
+    <!-- Chat Container (30% width) -->
+    <div class="chat-container">
+    <div class="header">
+      <div class="connection-status" id="connectionStatus"></div>
+      <h2>Random Chat</h2>
+      <div id="serverInfo">Connecting...</div>
+    </div>
+    
+    <!-- Profile Setup Screen -->
+    <div class="profile-setup" id="profileSetup">
+      <h3>Create Profile</h3>
+      <div class="form-group">
+        <label>Username:</label>
+        <input id="usernameInput" placeholder="Enter your username..." maxlength="20" />
+      </div>
+      <div class="form-group">
+        <label>Gender:</label>
+        <div class="gender-buttons">
+          <button class="gender-btn" data-gender="male" onclick="selectGender('male')">Guy</button>
+          <button class="gender-btn" data-gender="female" onclick="selectGender('female')">Girl</button>
+        </div>
+      </div>
+      <button class="start-btn" id="startBtn" onclick="setProfile()" disabled>Start Matching</button>
+    </div>
+    
+    <!-- Stats Panel -->
+    <div class="stats-panel hidden" id="statsPanel">
+      <div class="stats-row">
+        <span class="stats-label">Guys Online:</span>
+        <span id="maleStats">Waiting: 0, Chatting: 0</span>
+      </div>
+      <div class="stats-row">
+        <span class="stats-label">Girls Online:</span>
+        <span id="femaleStats">Waiting: 0, Chatting: 0</span>
+      </div>
+    </div>
+    
+    <!-- Main Screen -->
+    <div class="main-screen hidden" id="mainScreen">
+      <!-- Waiting Screen -->
+      <div class="waiting-screen hidden" id="waitingScreen">
+        <div class="spinner"></div>
+        <h3>Looking for a match...</h3>
+        <p>Please wait while we find someone for you to chat with.</p>
+      </div>
+      
+      <!-- Matched Screen -->
+      <div class="matched-screen hidden" id="matchedScreen">
+        <div class="match-info">
+          <p id="matchInfo">Connected with: <span id="partnerName"></span></p>
+        </div>
+        
+        <div class="chat-area">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="partner-avatar" id="partnerAvatar">?</div>
+            <div class="partner-info">
+              <h4 id="partnerNameHeader">Partner</h4>
+              <p id="partnerStatus">Online</p>
+            </div>
+            <div class="voice-controls">
+              <button class="voice-btn" id="startCallBtn" onclick="startVoiceCall()" title="Start Voice Call">🎤</button>
+              <button class="voice-btn hidden" id="endCallBtn" onclick="endVoiceCall()" title="End Call">📞</button>
+              <button class="voice-btn hidden" id="muteBtn" onclick="toggleMute()" title="Mute/Unmute">🔇</button>
+            </div>
+          </div>
+          
+          <div class="chat-messages" id="chatMessages"></div>
+          
+          <div class="typing-indicator" id="typingIndicator"></div>
+          
+          <div class="input-area">
+            <div class="input-container">
+              <button class="emoji-button">😊</button>
+              <textarea class="message-input" id="messageInput" placeholder="Message..." rows="1"></textarea>
+            </div>
+            <button class="send-button" id="sendBtn" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Control Buttons -->
+    <div class="control-buttons hidden" id="controlButtons">
+      <button class="control-btn find-match-btn hidden" id="findMatchBtn" onclick="findMatch()">Find Match</button>
+      <button class="control-btn disconnect-btn hidden" id="disconnectBtn" onclick="disconnect()">Disconnect</button>
+      <button class="control-btn new-match-btn hidden" id="newMatchBtn" onclick="findNewMatch()">New Match</button>
+    </div>
+  </div>
+
+  <!-- Call Screen Overlay -->
+  <div class="call-screen hidden" id="callScreen">
+    <div class="call-container">
+      <div class="call-header">
+        <div class="call-status">Voice Call</div>
+        <div class="call-timer" id="callTimer">00:00</div>
+      </div>
+      
+      <div class="call-avatar">
+        <div class="avatar-circle" id="callAvatar">
+          <span id="callPartnerInitial">?</span>
+        </div>
+        <div class="call-partner-name" id="callPartnerName">Partner</div>
+        <div class="call-connection-status" id="callConnectionStatus">Connecting...</div>
+      </div>
+      
+      <div class="call-controls">
+        <button class="call-control-btn mute-btn" id="callMuteBtn" onclick="toggleMute()">
+          <span id="muteIcon">🔇</span>
+        </button>
+        <button class="call-control-btn end-call-btn" onclick="endVoiceCall()">
+          📞
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Incoming Call Overlay -->
+  <div class="incoming-call hidden" id="incomingCall">
+    <div class="incoming-call-container">
+      <div class="incoming-call-header">
+        <div class="incoming-call-title">Incoming Voice Call</div>
+        <div class="ringing-animation">📞</div>
+      </div>
+      
+      <div class="incoming-call-avatar">
+        <div class="avatar-circle" id="incomingCallAvatar">
+          <span id="incomingCallPartnerInitial">?</span>
+        </div>
+        <div class="incoming-call-partner-name" id="incomingCallPartnerName">Partner</div>
+        <div class="incoming-call-status">is calling you...</div>
+      </div>
+      
+      <div class="incoming-call-controls">
+        <button class="incoming-call-btn decline-btn" onclick="declineCall()">
+          ❌
+        </button>
+        <button class="incoming-call-btn answer-btn" onclick="answerCall()">
+          📞
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let ws = null;
+    let myId = null;
+    let myUsername = null;
+    let myGender = null;
+    let currentState = 'profile'; // profile, online, waiting, matched
+    let soundEnabled = true;
+    let reconnectInterval = null;
+    let typingTimeout;
+    let partnerInfo = null;
+    let messageGroups = [];
+    let lastMessageSender = null;
+
+    // Voice chat variables
+    let localStream = null;
+    let peerConnection = null;
+    let isCallActive = false;
+    let isMuted = false;
+    
+    // Call screen variables
+    let callStartTime = null;
+    let callTimerInterval = null;
+    let isIncomingCall = false;
+    let callState = 'idle'; // idle, calling, ringing, connected
+
+    const elements = {
+      profileSetup: document.getElementById('profileSetup'),
+      usernameInput: document.getElementById('usernameInput'),
+      startBtn: document.getElementById('startBtn'),
+      statsPanel: document.getElementById('statsPanel'),
+      maleStats: document.getElementById('maleStats'),
+      femaleStats: document.getElementById('femaleStats'),
+      mainScreen: document.getElementById('mainScreen'),
+      waitingScreen: document.getElementById('waitingScreen'),
+      matchedScreen: document.getElementById('matchedScreen'),
+      chatMessages: document.getElementById('chatMessages'),
+      messageInput: document.getElementById('messageInput'),
+      typingIndicator: document.getElementById('typingIndicator'),
+      controlButtons: document.getElementById('controlButtons'),
+      findMatchBtn: document.getElementById('findMatchBtn'),
+      disconnectBtn: document.getElementById('disconnectBtn'),
+      newMatchBtn: document.getElementById('newMatchBtn'),
+      connectionStatus: document.getElementById('connectionStatus'),
+      serverInfo: document.getElementById('serverInfo'),
+      partnerName: document.getElementById('partnerName'),
+      partnerNameHeader: document.getElementById('partnerNameHeader'),
+      partnerAvatar: document.getElementById('partnerAvatar'),
+      partnerStatus: document.getElementById('partnerStatus'),
+      sendBtn: document.getElementById('sendBtn'),
+      startCallBtn: document.getElementById('startCallBtn'),
+      endCallBtn: document.getElementById('endCallBtn'),
+      muteBtn: document.getElementById('muteBtn'),
+      callScreen: document.getElementById('callScreen'),
+      callTimer: document.getElementById('callTimer'),
+      callAvatar: document.getElementById('callAvatar'),
+      callPartnerName: document.getElementById('callPartnerName'),
+      callPartnerInitial: document.getElementById('callPartnerInitial'),
+      callConnectionStatus: document.getElementById('callConnectionStatus'),
+      callMuteBtn: document.getElementById('callMuteBtn'),
+      muteIcon: document.getElementById('muteIcon'),
+      incomingCall: document.getElementById('incomingCall'),
+      incomingCallAvatar: document.getElementById('incomingCallAvatar'),
+      incomingCallPartnerName: document.getElementById('incomingCallPartnerName'),
+      incomingCallPartnerInitial: document.getElementById('incomingCallPartnerInitial')
+    };
+
+    function connect() {
+      ws = new WebSocket('ws://localhost:8081');
+      
+      ws.onopen = () => {
+        elements.connectionStatus.classList.remove('disconnected');
+        elements.serverInfo.textContent = 'Connected';
+        if (reconnectInterval) {
+          clearInterval(reconnectInterval);
+          reconnectInterval = null;
+        }
+      };
+
+      ws.onclose = () => {
+        elements.connectionStatus.classList.add('disconnected');
+        elements.serverInfo.textContent = 'Disconnected - Reconnecting...';
+        if (!reconnectInterval) {
+          reconnectInterval = setInterval(connect, 3000);
+        }
+      };
+
+      ws.onerror = () => {
+        elements.connectionStatus.classList.add('disconnected');
+        elements.serverInfo.textContent = 'Connection Error';
+      };
+
+      ws.onmessage = handleMessage;
+    }
+
+    function handleMessage(event) {
+      let data;
+      try { data = JSON.parse(event.data); } catch { return; }
+      
+      switch(data.type) {
+        case 'welcome':
+          myId = data.id;
+          if (data.stats) {
+            updateStats(data.stats);
+          }
+          break;
+          
+        case 'statsUpdate':
+          updateStats(data.stats);
+          break;
+          
+        case 'waiting':
+          currentState = 'waiting';
+          showWaitingScreen();
+          break;
+          
+        case 'matched':
+          currentState = 'matched';
+          partnerInfo = data.partner;
+          elements.partnerName.textContent = `${data.partner.username} (${data.partner.gender})`;
+          elements.partnerNameHeader.textContent = data.partner.username;
+          elements.partnerAvatar.textContent = data.partner.username[0].toUpperCase();
+          elements.partnerStatus.textContent = 'Online';
+          showMatchedScreen();
+          if (soundEnabled) playNotification();
+          break;
+          
+        case 'message':
+          displayMessage(data);
+          if (!data.fromMe && soundEnabled) playNotification();
+          break;
+          
+        case 'typing':
+          if (data.typing) {
+            elements.typingIndicator.innerHTML = `
+              ${partnerInfo?.username || 'Partner'} is typing
+              <span class="typing-dots">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+              </span>
+            `;
+          } else {
+            elements.typingIndicator.textContent = '';
+          }
+          break;
+          
+        case 'voiceSignal':
+          handleVoiceSignal(data);
+          break;
+          
+        case 'partnerDisconnected':
+          currentState = 'online';
+          endVoiceCall(); // End any active call when partner disconnects
+          showDisconnectedMessage(data.message);
+          showOnlineScreen();
+          break;
+      }
+    }
+
+    function selectGender(gender) {
+      myGender = gender;
+      document.querySelectorAll('.gender-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      document.querySelector(`[data-gender="${gender}"]`).classList.add('selected');
+      checkFormValid();
+    }
+
+    function checkFormValid() {
+      const username = elements.usernameInput.value.trim();
+      elements.startBtn.disabled = !username || !myGender;
+    }
+
+    function setProfile() {
+      const username = elements.usernameInput.value.trim();
+      if (!username || !myGender) return;
+      
+      myUsername = username;
+      ws.send(JSON.stringify({ 
+        type: 'setProfile', 
+        username: myUsername,
+        gender: myGender
+      }));
+      
+      currentState = 'online';
+      showOnlineScreen();
+    }
+
+    function showOnlineScreen() {
+      elements.profileSetup.classList.add('hidden');
+      elements.statsPanel.classList.remove('hidden');
+      elements.mainScreen.classList.remove('hidden');
+      elements.controlButtons.classList.remove('hidden');
+      elements.waitingScreen.classList.add('hidden');
+      elements.matchedScreen.classList.add('hidden');
+      
+      elements.findMatchBtn.classList.remove('hidden');
+      elements.disconnectBtn.classList.add('hidden');
+      elements.newMatchBtn.classList.add('hidden');
+    }
+
+    function showWaitingScreen() {
+      elements.waitingScreen.classList.remove('hidden');
+      elements.matchedScreen.classList.add('hidden');
+      
+      elements.findMatchBtn.classList.add('hidden');
+      elements.disconnectBtn.classList.remove('hidden');
+      elements.newMatchBtn.classList.add('hidden');
+    }
+
+    function showMatchedScreen() {
+      elements.waitingScreen.classList.add('hidden');
+      elements.matchedScreen.classList.remove('hidden');
+      elements.statsPanel.classList.add('hidden'); // Hide stats when chat starts
+      elements.chatMessages.innerHTML = '';
+      messageGroups = [];
+      lastMessageSender = null;
+      
+      elements.findMatchBtn.classList.add('hidden');
+      elements.disconnectBtn.classList.remove('hidden');
+      elements.newMatchBtn.classList.remove('hidden');
+      
+      // Auto-resize textarea
+      autoResizeTextarea();
+      setTimeout(() => elements.messageInput.focus(), 100);
+    }
+
+    function autoResizeTextarea() {
+      const textarea = elements.messageInput;
+      textarea.addEventListener('input', function() {
+        // Reset height to calculate new height
+        this.style.height = '20px';
+        // Set new height with max limit
+        this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+        
+        // Update send button state
+        elements.sendBtn.disabled = !this.value.trim();
+        elements.sendBtn.style.color = this.value.trim() ? '#222222' : '#cccccc';
+      });
+      
+      // Initial state
+      elements.sendBtn.disabled = true;
+      elements.sendBtn.style.color = '#cccccc';
+    }
+
+    function findMatch() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+      ws.send(JSON.stringify({ type: 'findMatch' }));
+    }
+
+    function disconnect() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+      ws.send(JSON.stringify({ type: 'disconnect' }));
+      currentState = 'online';
+      showOnlineScreen();
+    }
+
+    function findNewMatch() {
+      disconnect();
+      setTimeout(() => findMatch(), 500);
+    }
+
+    function sendMessage() {
+      const text = elements.messageInput.value.trim();
+      if (!text || !ws || ws.readyState !== WebSocket.OPEN || currentState !== 'matched') return;
+      
+      ws.send(JSON.stringify({ type: 'message', text }));
+      elements.messageInput.value = '';
+      elements.messageInput.style.height = '20px';
+      elements.sendBtn.disabled = true;
+      elements.sendBtn.style.color = '#cccccc';
+      sendTyping(false);
+    }
+
+    function sendTyping(isTyping) {
+      if (!ws || ws.readyState !== WebSocket.OPEN || currentState !== 'matched') return;
+      ws.send(JSON.stringify({ type: 'typing', typing: isTyping }));
+    }
+
+    function displayMessage(data) {
+      const isOwn = data.fromMe;
+      const senderChanged = lastMessageSender !== (isOwn ? 'me' : 'partner');
+      
+      // Create message group if sender changed or if it's been more than 5 minutes
+      if (senderChanged) {
+        createNewMessageGroup(isOwn);
+        lastMessageSender = isOwn ? 'me' : 'partner';
+      }
+      
+      // Add message to current group
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isOwn ? 'own' : 'other'}`;
+      
+      messageDiv.innerHTML = `
+        <div class="message-bubble">
+          <div class="message-text">${escapeHtml(data.text)}</div>
+        </div>
+      `;
+      
+      // Add to current message group
+      const currentGroup = elements.chatMessages.lastElementChild;
+      currentGroup.appendChild(messageDiv);
+      
+      elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+    }
+
+    function createNewMessageGroup(isOwn) {
+      const groupDiv = document.createElement('div');
+      groupDiv.className = `message-group ${isOwn ? 'own' : 'other'}`;
+      elements.chatMessages.appendChild(groupDiv);
+    }
+
+    function showDisconnectedMessage(message) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message';
+      messageDiv.style.background = '#ffebee';
+      messageDiv.style.color = '#c62828';
+      messageDiv.style.textAlign = 'center';
+      messageDiv.style.maxWidth = '100%';
+      messageDiv.innerHTML = `<div class="message-text">${message}</div>`;
+      elements.chatMessages.appendChild(messageDiv);
+      elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+    }
+
+    function addSystemMessage(message) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message';
+      messageDiv.style.background = '#f0f0f0';
+      messageDiv.style.color = '#666';
+      messageDiv.style.textAlign = 'center';
+      messageDiv.style.maxWidth = '100%';
+      messageDiv.style.fontSize = '14px';
+      messageDiv.style.padding = '8px 12px';
+      messageDiv.style.margin = '5px auto';
+      messageDiv.innerHTML = `<div class="message-text">${message}</div>`;
+      elements.chatMessages.appendChild(messageDiv);
+      elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+    }
+
+    function updateStats(stats) {
+      elements.maleStats.textContent = `Waiting: ${stats.waiting.male}, Chatting: ${stats.matched.male}`;
+      elements.femaleStats.textContent = `Waiting: ${stats.waiting.female}, Chatting: ${stats.matched.female}`;
+    }
+
+    function playNotification() {
+      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmLjAzuByvHZiDcIGmi67eeeTRAMUKfj8LZjHAY4kdfyz3QdB');
+      audio.volume = 0.3;
+      audio.play().catch(() => {});
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Voice Chat Functions
+    async function startVoiceCall() {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        callState = 'calling';
+        ws.send(JSON.stringify({
+          type: 'voiceSignal',
+          signalType: 'call-request'
+        }));
+        
+        addSystemMessage('📞 Calling...');
+        
+        // Show calling state on start call button
+        elements.startCallBtn.textContent = '⏳';
+        elements.startCallBtn.disabled = true;
+      }
+    }
+    
+    function showIncomingCall() {
+      if (partnerInfo) {
+        elements.incomingCallPartnerName.textContent = partnerInfo.username;
+        elements.incomingCallPartnerInitial.textContent = partnerInfo.username.charAt(0).toUpperCase();
+      }
+      
+      isIncomingCall = true;
+      callState = 'ringing';
+      elements.incomingCall.classList.remove('hidden');
+    }
+    
+    function hideIncomingCall() {
+      isIncomingCall = false;
+      elements.incomingCall.classList.add('hidden');
+    }
+    
+    async function answerCall() {
+      try {
+        hideIncomingCall();
+        
+        // Request microphone permission
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        // Create peer connection
+        peerConnection = new RTCPeerConnection({
+          iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        });
+        
+        // Add local stream to peer connection
+        localStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, localStream);
+        });
+        
+        // Handle incoming audio stream
+        peerConnection.ontrack = (event) => {
+          const remoteAudio = new Audio();
+          remoteAudio.srcObject = event.streams[0];
+          remoteAudio.play();
+        };
+        
+        // Handle ICE candidates
+        peerConnection.onicecandidate = (event) => {
+          if (event.candidate && ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+              type: 'voiceSignal',
+              signalType: 'ice-candidate',
+              candidate: event.candidate
+            }));
+          }
+        };
+        
+        // Send acceptance and wait for offer
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'voiceSignal',
+            signalType: 'call-accepted'
+          }));
+        }
+        
+        callState = 'connected';
+        
+      } catch (error) {
+        console.error('Error answering call:', error);
+        alert('Could not access microphone. Please check permissions.');
+        declineCall();
+      }
+    }
+    
+    function declineCall() {
+      hideIncomingCall();
+      
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'voiceSignal',
+          signalType: 'call-declined'
+        }));
+      }
+      
+      callState = 'idle';
+      addSystemMessage('📞 Call declined');
+    }
+    
+    async function initiateActualCall() {
+      try {
+        // Request microphone permission for caller
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        // Create peer connection
+        peerConnection = new RTCPeerConnection({
+          iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+        });
+        
+        // Add local stream to peer connection
+        localStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, localStream);
+        });
+        
+        // Handle incoming audio stream
+        peerConnection.ontrack = (event) => {
+          const remoteAudio = new Audio();
+          remoteAudio.srcObject = event.streams[0];
+          remoteAudio.play();
+        };
+        
+        // Handle ICE candidates
+        peerConnection.onicecandidate = (event) => {
+          if (event.candidate && ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+              type: 'voiceSignal',
+              signalType: 'ice-candidate',
+              candidate: event.candidate
+            }));
+          }
+        };
+        
+        // Create and send offer
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'voiceSignal',
+            signalType: 'offer',
+            offer: offer
+          }));
+        }
+        
+        isCallActive = true;
+        updateVoiceUI();
+        showCallScreen();
+        updateCallConnectionStatus('Connecting...');
+        
+      } catch (error) {
+        console.error('Error initiating call:', error);
+        alert('Could not access microphone. Please check permissions.');
+      }
+    }
+    
+    function endVoiceCall() {
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+      
+      if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+      }
+      
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'voiceSignal',
+          signalType: 'end-call'
+        }));
+      }
+      
+      isCallActive = false;
+      isMuted = false;
+      callState = 'idle';
+      hideIncomingCall();
+      updateVoiceUI();
+      hideCallScreen();
+      
+      // Reset call button
+      elements.startCallBtn.textContent = '🎤';
+      elements.startCallBtn.disabled = false;
+      
+      // Add call ended message to chat if call was active
+      if (callStartTime) {
+        const callDuration = Math.floor((Date.now() - callStartTime) / 1000);
+        const minutes = Math.floor(callDuration / 60);
+        const seconds = callDuration % 60;
+        
+        let durationText;
+        if (minutes > 0) {
+          durationText = `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+          if (seconds > 0) {
+            durationText += ` and ${seconds} second${seconds !== 1 ? 's' : ''}`;
+          }
+        } else {
+          durationText = `${seconds} second${seconds !== 1 ? 's' : ''}`;
+        }
+        
+        addSystemMessage(`📞 Call ended. Duration: ${durationText}`);
+      }
+    }
+    
+    function toggleMute() {
+      if (localStream) {
+        localStream.getAudioTracks().forEach(track => {
+          track.enabled = !track.enabled;
+        });
+        isMuted = !isMuted;
+        updateVoiceUI();
+        updateCallScreenMute();
+      }
+    }
+    
+    function updateVoiceUI() {
+      if (isCallActive) {
+        elements.startCallBtn.classList.add('hidden');
+        elements.endCallBtn.classList.remove('hidden');
+        elements.muteBtn.classList.remove('hidden');
+        elements.startCallBtn.classList.remove('calling');
+        
+        if (isMuted) {
+          elements.muteBtn.textContent = '🔇';
+          elements.muteBtn.classList.add('active');
+        } else {
+          elements.muteBtn.textContent = '🎤';
+          elements.muteBtn.classList.remove('active');
+        }
+      } else {
+        elements.startCallBtn.classList.remove('hidden');
+        elements.endCallBtn.classList.add('hidden');
+        elements.muteBtn.classList.add('hidden');
+        elements.startCallBtn.classList.remove('calling');
+      }
+    }
+    
+    async function handleVoiceSignal(data) {
+      try {
+        if (data.signalType === 'call-request') {
+          // Incoming call request - show ringing UI
+          showIncomingCall();
+          const callerName = partnerInfo ? partnerInfo.username : 'Partner';
+          addSystemMessage(`📞 Incoming call from ${callerName}`);
+          
+        } else if (data.signalType === 'call-accepted') {
+          // Call was accepted, start the actual WebRTC flow
+          initiateActualCall();
+          addSystemMessage('📞 Call accepted - connecting...');
+          
+        } else if (data.signalType === 'call-declined') {
+          // Call was declined
+          callState = 'idle';
+          elements.startCallBtn.textContent = '🎤';
+          elements.startCallBtn.disabled = false;
+          addSystemMessage('📞 Call declined');
+          
+        } else if (data.signalType === 'offer') {
+          // WebRTC offer - for call receiver
+          await peerConnection.setRemoteDescription(data.offer);
+          const answer = await peerConnection.createAnswer();
+          await peerConnection.setLocalDescription(answer);
+          
+          ws.send(JSON.stringify({
+            type: 'voiceSignal',
+            signalType: 'answer',
+            answer: answer
+          }));
+          
+          isCallActive = true;
+          updateVoiceUI();
+          showCallScreen();
+          updateCallConnectionStatus('Connected');
+          startCallTimer();
+          addSystemMessage('📞 Voice chat connected');
+          
+        } else if (data.signalType === 'answer') {
+          // WebRTC answer - for call initiator
+          await peerConnection.setRemoteDescription(data.answer);
+          updateCallConnectionStatus('Connected');
+          startCallTimer();
+          addSystemMessage('📞 Voice chat connected');
+          
+        } else if (data.signalType === 'ice-candidate') {
+          if (peerConnection) {
+            await peerConnection.addIceCandidate(data.candidate);
+          }
+          
+        } else if (data.signalType === 'end-call') {
+          endVoiceCall();
+        }
+      } catch (error) {
+        console.error('Error handling voice signal:', error);
+      }
+    }
+
+    // Call Screen Functions
+    function showCallScreen() {
+      if (partnerInfo) {
+        // Update call screen with partner info
+        elements.callPartnerName.textContent = partnerInfo.username;
+        elements.callPartnerInitial.textContent = partnerInfo.username.charAt(0).toUpperCase();
+      }
+      
+      elements.callScreen.classList.remove('hidden');
+      elements.callConnectionStatus.textContent = 'Connecting...';
+    }
+    
+    function startCallTimer() {
+      // Start call timer only when call is connected
+      callStartTime = Date.now();
+      callTimerInterval = setInterval(updateCallTimer, 1000);
+    }
+    
+    function hideCallScreen() {
+      elements.callScreen.classList.add('hidden');
+      
+      // Stop call timer
+      if (callTimerInterval) {
+        clearInterval(callTimerInterval);
+        callTimerInterval = null;
+      }
+      callStartTime = null;
+      elements.callTimer.textContent = '00:00';
+    }
+    
+    function updateCallTimer() {
+      if (callStartTime) {
+        const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        elements.callTimer.textContent = 
+          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+    }
+    
+    function updateCallConnectionStatus(status) {
+      elements.callConnectionStatus.textContent = status;
+    }
+    
+    function updateCallScreenMute() {
+      if (isMuted) {
+        elements.muteIcon.textContent = '🔇';
+        elements.callMuteBtn.classList.add('muted');
+      } else {
+        elements.muteIcon.textContent = '🎤';
+        elements.callMuteBtn.classList.remove('muted');
+      }
+    }
+
+    function formatTime(timestamp) {
+      if (!timestamp) return '';
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      });
+    }
+
+    // Event listeners
+    elements.usernameInput.addEventListener('input', checkFormValid);
+    elements.usernameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') setProfile();
+    });
+
+    elements.messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    elements.messageInput.addEventListener('input', () => {
+      sendTyping(true);
+      clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => sendTyping(false), 1000);
+    });
+
+    // Initialize connection
+    connect();
+  </script>
+</body>
+</html>
