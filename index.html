@@ -688,6 +688,19 @@
       background: #ff4444;
     }
     
+    .speaker-btn {
+      background: #4a4a4a;
+      color: white;
+    }
+    
+    .speaker-btn:hover {
+      background: #5a5a5a;
+    }
+    
+    .speaker-btn.earpiece {
+      background: #2196F3;
+    }
+    
     .end-call-btn {
       background: #ff4444;
       color: white;
@@ -994,6 +1007,9 @@
         <button class="call-control-btn mute-btn" id="callMuteBtn" onclick="toggleMute()">
           <span id="muteIcon">🔇</span>
         </button>
+        <button class="call-control-btn speaker-btn" id="speakerBtn" onclick="toggleSpeaker()">
+          <span id="speakerIcon">🔊</span>
+        </button>
         <button class="call-control-btn end-call-btn" onclick="endVoiceCall()">
           📞
         </button>
@@ -1046,6 +1062,7 @@
     let peerConnection = null;
     let isCallActive = false;
     let isMuted = false;
+    let isSpeakerOn = true; // Speaker is on by default
     
     // Call screen variables
     let callStartTime = null;
@@ -1088,6 +1105,8 @@
       callConnectionStatus: document.getElementById('callConnectionStatus'),
       callMuteBtn: document.getElementById('callMuteBtn'),
       muteIcon: document.getElementById('muteIcon'),
+      speakerBtn: document.getElementById('speakerBtn'),
+      speakerIcon: document.getElementById('speakerIcon'),
       incomingCall: document.getElementById('incomingCall'),
       incomingCallAvatar: document.getElementById('incomingCallAvatar'),
       incomingCallPartnerName: document.getElementById('incomingCallPartnerName'),
@@ -1438,6 +1457,7 @@
         peerConnection.ontrack = (event) => {
           const remoteAudio = new Audio();
           remoteAudio.srcObject = event.streams[0];
+          setSpeakerMode(remoteAudio, isSpeakerOn);
           remoteAudio.play();
         };
         
@@ -1502,6 +1522,7 @@
         peerConnection.ontrack = (event) => {
           const remoteAudio = new Audio();
           remoteAudio.srcObject = event.streams[0];
+          setSpeakerMode(remoteAudio, isSpeakerOn);
           remoteAudio.play();
         };
         
@@ -1599,6 +1620,47 @@
       }
     }
     
+    function toggleSpeaker() {
+      isSpeakerOn = !isSpeakerOn;
+      updateCallScreenSpeaker();
+      
+      // Apply speaker mode to any active remote audio
+      const remoteAudios = document.querySelectorAll('audio');
+      remoteAudios.forEach(audio => {
+        if (audio.srcObject) {
+          setSpeakerMode(audio, isSpeakerOn);
+        }
+      });
+    }
+    
+    function setSpeakerMode(audioElement, useSpeaker) {
+      if (audioElement.setSinkId && typeof audioElement.setSinkId === 'function') {
+        // Use setSinkId if available (Chrome, Edge)
+        if (useSpeaker) {
+          audioElement.setSinkId('default').catch(err => {
+            console.log('Could not set speaker output:', err);
+          });
+        } else {
+          // Try to use earpiece/phone speaker (device-dependent)
+          navigator.mediaDevices.enumerateDevices().then(devices => {
+            const audioOutputs = devices.filter(device => device.kind === 'audiooutput');
+            const earpiece = audioOutputs.find(device => 
+              device.label.toLowerCase().includes('earpiece') || 
+              device.label.toLowerCase().includes('phone') ||
+              device.label.toLowerCase().includes('receiver')
+            );
+            if (earpiece) {
+              audioElement.setSinkId(earpiece.deviceId).catch(err => {
+                console.log('Could not set earpiece output:', err);
+              });
+            }
+          }).catch(err => {
+            console.log('Could not enumerate devices:', err);
+          });
+        }
+      }
+    }
+    
     function updateVoiceUI() {
       if (isCallActive) {
         elements.startCallBtn.classList.add('hidden');
@@ -1690,6 +1752,7 @@
       
       elements.callScreen.classList.remove('hidden');
       elements.callConnectionStatus.textContent = 'Connecting...';
+      updateCallScreenSpeaker(); // Initialize speaker button state
     }
     
     function startCallTimer() {
@@ -1731,6 +1794,18 @@
       } else {
         elements.muteIcon.textContent = '🎤';
         elements.callMuteBtn.classList.remove('muted');
+      }
+    }
+    
+    function updateCallScreenSpeaker() {
+      if (isSpeakerOn) {
+        elements.speakerIcon.textContent = '🔊';
+        elements.speakerBtn.classList.remove('earpiece');
+        elements.speakerBtn.title = 'Switch to Earpiece';
+      } else {
+        elements.speakerIcon.textContent = '🔉';
+        elements.speakerBtn.classList.add('earpiece');
+        elements.speakerBtn.title = 'Switch to Speaker';
       }
     }
 
