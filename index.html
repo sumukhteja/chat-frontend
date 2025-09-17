@@ -2607,7 +2607,7 @@
       
       <!-- Profile Picture Upload -->
       <div class="form-group">
-        <label>Profile Picture:</label>
+        <label>Profile Picture (Optional):</label>
         <div class="profile-picture-upload">
           <div class="profile-picture-preview" id="profilePicturePreview">
             <div class="profile-picture-placeholder">📸</div>
@@ -2651,7 +2651,7 @@
       <div class="matched-screen hidden" id="matchedScreen">
         <!-- Chat Header -->
         <div class="chat-header">
-          <button class="back-btn" onclick="disconnectAndGoBack()" title="Find New Partner">⬅️</button>
+          <button class="back-btn" onclick="goToProfilePage()" title="Profile & Settings">⬅️</button>
           <div class="partner-avatar" id="partnerAvatar">?</div>
           <div class="partner-info">
             <h4 id="partnerNameHeader" class="clickable-username" onclick="showPartnerProfile()">Partner</h4>
@@ -3678,6 +3678,90 @@
       disconnect();
       setTimeout(() => findMatch(), 500);
     }
+    
+    function goToProfilePage() {
+      // End any active call first
+      if (!elements.endCallBtn.classList.contains('hidden')) {
+        endVoiceCall();
+      }
+      
+      // Disconnect from current partner
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'disconnect' }));
+      }
+      
+      // Show profile page
+      showProfileSettingsPage();
+    }
+    
+    function showProfileSettingsPage() {
+      // Hide all screens
+      elements.mainScreen.classList.add('hidden');
+      elements.waitingScreen.classList.add('hidden');
+      elements.matchedScreen.classList.add('hidden');
+      elements.callScreen.classList.add('hidden');
+      
+      // Show profile setup but modify it for settings
+      elements.profileSetup.classList.remove('hidden');
+      
+      // Change the UI to be a settings/profile page
+      const setupElement = elements.profileSetup;
+      const titleElement = setupElement.querySelector('h2');
+      const buttonElement = setupElement.querySelector('.start-btn');
+      
+      if (titleElement) titleElement.textContent = 'Profile & Settings';
+      if (buttonElement) {
+        buttonElement.textContent = 'Find New Partner';
+        buttonElement.onclick = () => {
+          // Reset title back and start matching
+          titleElement.textContent = 'Welcome to Chattie! 💬';
+          buttonElement.textContent = 'Start Matching';
+          buttonElement.onclick = setProfile;
+          findMatch();
+        };
+      }
+      
+      // Add a back to landing button
+      let backToLandingBtn = setupElement.querySelector('.back-to-landing-btn');
+      if (!backToLandingBtn) {
+        backToLandingBtn = document.createElement('button');
+        backToLandingBtn.className = 'secondary-btn back-to-landing-btn';
+        backToLandingBtn.textContent = '🏠 Back to Landing';
+        backToLandingBtn.style.cssText = 'width: 100%; margin-top: 12px;';
+        backToLandingBtn.onclick = goBackToLanding;
+        
+        // Insert before the friends/sign out buttons
+        const buttonsContainer = setupElement.querySelector('div[style*="margin-top: 16px"]');
+        buttonsContainer.parentNode.insertBefore(backToLandingBtn, buttonsContainer);
+      }
+      backToLandingBtn.style.display = 'block';
+    }
+    
+    function goBackToLanding() {
+      // Reset the profile page back to original state
+      const setupElement = elements.profileSetup;
+      const titleElement = setupElement.querySelector('h2');
+      const buttonElement = setupElement.querySelector('.start-btn');
+      
+      if (titleElement) titleElement.textContent = 'Welcome to Chattie! 💬';
+      if (buttonElement) {
+        buttonElement.textContent = 'Start Matching';
+        buttonElement.onclick = setProfile;
+      }
+      
+      // Hide the back to landing button
+      const backToLandingBtn = setupElement.querySelector('.back-to-landing-btn');
+      if (backToLandingBtn) {
+        backToLandingBtn.style.display = 'none';
+      }
+      
+      // Show the profile setup as landing
+      elements.profileSetup.classList.remove('hidden');
+      elements.mainScreen.classList.add('hidden');
+      elements.waitingScreen.classList.add('hidden');
+      elements.matchedScreen.classList.add('hidden');
+      elements.callScreen.classList.add('hidden');
+    }
 
     // Reply functionality
     let replyingTo = null;
@@ -3942,12 +4026,19 @@
     
     function sendImage(base64Image, width, height) {
       if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({
+        const imageData = {
           type: 'image',
           image: base64Image,
           width: width,
-          height: height
-        }));
+          height: height,
+          fromMe: true,
+          timestamp: Date.now()
+        };
+        
+        ws.send(JSON.stringify(imageData));
+        
+        // Display the image locally for the sender
+        displayImage(imageData);
       }
     }
     
