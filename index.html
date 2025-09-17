@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Random Chat</title>
+  <title>Chattie</title>
+  
+  <!-- Google OAuth 2.0 -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <meta name="google-signin-client_id" content="59001574467-2gf44nc69j4k8p7hlakuqed8unngn6hv.apps.googleusercontent.com">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
@@ -224,28 +228,100 @@
       transform: none;
     }
     
-    /* Stats Panel - Minimal Design */
-    .stats-panel {
-      background: #f8fafc;
-      padding: 16px 20px;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 13px;
+    /* Google Sign-In Button Styles */
+    .google-signin-container {
+      margin-bottom: 24px;
+    }
+    
+    .google-signin-btn {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      background: #ffffff;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      color: #374151;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .google-signin-btn:hover {
+      border-color: #d1d5db;
+      background: #f9fafb;
+      transform: translateY(-1px);
+    }
+    
+    .google-signin-btn:active {
+      transform: translateY(0);
+    }
+    
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+    
+    .divider::before {
+      margin-right: 16px;
+    }
+    
+    .divider::after {
+      margin-left: 16px;
+    }
+    
+    .auth-section {
+      margin-bottom: 24px;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .user-info h4 {
+      margin: 0;
+      color: #1f2937;
+      font-weight: 600;
+    }
+    
+    .user-info p {
+      margin: 4px 0 0 0;
       color: #6b7280;
-    }
-    
-    .stats-row { 
-      display: flex; 
-      justify-content: space-between; 
-      margin-bottom: 4px; 
-    }
-    
-    .stats-row:last-child { 
-      margin-bottom: 0; 
-    }
-    
-    .stats-label { 
-      font-weight: 500; 
-      color: #374151; 
+      font-size: 14px;
     }
     
     /* Main Screen Layout */
@@ -999,12 +1075,24 @@
       border: none;
       font-size: 24px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    
+    .call-control-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
     
     .mute-btn {
@@ -1260,11 +1348,6 @@
       
       .typing-indicator {
         padding: 8px 16px;
-        font-size: 12px;
-      }
-      
-      .stats-panel {
-        padding: 12px 16px;
         font-size: 12px;
       }
       
@@ -1674,13 +1757,6 @@
         min-height: auto;
       }
       
-      /* Ensure stats panel has proper spacing */
-      .stats-panel {
-        padding: 12px 16px;
-        font-size: 12px;
-        display: block !important; /* Always show stats on mobile */
-      }
-      
       /* Make sure control buttons container is always visible when needed */
       .control-buttons:not(.hidden) {
         display: flex !important;
@@ -1782,6 +1858,141 @@
       background: #229954;
       transform: scale(1.1);
     }
+    
+    /* Quiz Game Styles */
+    .quiz-game-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px 0;
+      max-width: 100%;
+      width: 100%;
+    }
+    
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .quiz-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0;
+      flex: 1;
+      text-align: left;
+    }
+    
+    .quiz-timer {
+      background: #ef4444;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 16px;
+      min-width: 60px;
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .quiz-content {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px 20px;
+      margin-bottom: 20px;
+    }
+    
+    .quiz-question {
+      font-size: 18px;
+      font-weight: 500;
+      color: #ffffff;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+    
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .quiz-option {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid transparent;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: #10b981;
+    }
+    
+    .quiz-option.selected {
+      background: #10b981;
+      border-color: #059669;
+      transform: scale(1.05);
+    }
+    
+    .quiz-option.correct {
+      background: #10b981;
+      border-color: #059669;
+    }
+    
+    .quiz-option.incorrect {
+      background: #ef4444;
+      border-color: #dc2626;
+    }
+    
+    .quiz-results {
+      text-align: center;
+    }
+    
+    .quiz-result-text {
+      font-size: 16px;
+      font-weight: 500;
+      color: #10b981;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 12px;
+    }
+    
+    .quiz-next-btn {
+      background: #10b981;
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    
+    .quiz-next-btn:hover {
+      background: #059669;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -1792,11 +2003,47 @@
     
     <!-- Profile Setup Screen -->
     <div class="profile-setup" id="profileSetup">
-      <h3>Enter Details</h3>
-      <div class="form-group">
-        <label>Username:</label>
-        <input id="usernameInput" placeholder="Enter your username..." maxlength="20" />
+      <h3>Welcome to Chattie</h3>
+      
+      <!-- Google Authentication Section -->
+      <div class="auth-section" id="authSection">
+        <div class="google-signin-container">
+          <div id="g_id_onload"
+               data-client_id="59001574467-2gf44nc69j4k8p7hlakuqed8unngn6hv.apps.googleusercontent.com"
+               data-context="signin"
+               data-ux_mode="popup"
+               data-callback="handleCredentialResponse"
+               data-auto_prompt="false">
+          </div>
+          <button class="google-signin-btn" id="customGoogleBtn" onclick="initiateGoogleSignIn()">
+            <svg class="google-icon" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign in with Google
+          </button>
+        </div>
+        
+        <div class="divider">or</div>
+        
+        <div class="form-group">
+          <label>Username:</label>
+          <input id="usernameInput" placeholder="Enter your username..." maxlength="20" />
+        </div>
       </div>
+      
+      <!-- User Profile Display (hidden initially) -->
+      <div class="user-profile" id="userProfile" style="display: none;">
+        <img class="user-avatar" id="userAvatar" src="" alt="User Avatar">
+        <div class="user-info">
+          <h4 id="userName">User Name</h4>
+          <p id="userEmail">user@email.com</p>
+        </div>
+        <button onclick="signOut()" style="margin-left: auto; padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">Sign Out</button>
+      </div>
+      
       <div class="form-group">
         <label>Gender:</label>
         <div class="gender-buttons">
@@ -1805,18 +2052,6 @@
         </div>
       </div>
       <button class="start-btn" id="startBtn" onclick="setProfile()" disabled>Start Matching</button>
-    </div>
-    
-    <!-- Stats Panel -->
-    <div class="stats-panel hidden" id="statsPanel">
-      <div class="stats-row">
-        <span class="stats-label">Guys Online:</span>
-        <span id="maleStats">Waiting: 0, Chatting: 0</span>
-      </div>
-      <div class="stats-row">
-        <span class="stats-label">Girls Online:</span>
-        <span id="femaleStats">Waiting: 0, Chatting: 0</span>
-      </div>
     </div>
     
     <!-- Main Screen -->
@@ -1893,6 +2128,30 @@
   <!-- Call Screen Overlay -->
   <div class="call-screen hidden" id="callScreen">
     <div class="call-container">
+      <!-- Quiz Game Interface -->
+      <div class="quiz-game-section" id="quizGameSection">
+        <div class="quiz-header">
+          <h3 class="quiz-title" id="quizTitle">Get to Know Each Other!</h3>
+          <div class="quiz-timer" id="quizTimer">30</div>
+        </div>
+        
+        <div class="quiz-content" id="quizContent">
+          <div class="quiz-question" id="quizQuestion">What's your favorite movie?</div>
+          <div class="quiz-options" id="quizOptions">
+            <button class="quiz-option" onclick="selectQuizAnswer(0)">Action Movies</button>
+            <button class="quiz-option" onclick="selectQuizAnswer(1)">Comedy Movies</button>
+            <button class="quiz-option" onclick="selectQuizAnswer(2)">Drama Movies</button>
+            <button class="quiz-option" onclick="selectQuizAnswer(3)">Horror Movies</button>
+          </div>
+          
+          <div class="quiz-results hidden" id="quizResults">
+            <div class="quiz-result-text" id="quizResultText">You both chose: Comedy Movies! 🎬</div>
+            <button class="quiz-next-btn" onclick="nextQuizQuestion()">Next Question</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Call Controls moved to bottom -->
       <div class="call-header">
         <div class="call-status">Voice Call</div>
         <div class="call-timer" id="callTimer">00:00</div>
@@ -1948,6 +2207,10 @@
   </div>
 
   <script>
+    // Google Authentication Variables
+    let googleUser = null;
+    let isGoogleAuthenticated = false;
+    
     let ws = null;
     let myId = null;
     let myUsername = null;
@@ -1977,9 +2240,6 @@
       profileSetup: document.getElementById('profileSetup'),
       usernameInput: document.getElementById('usernameInput'),
       startBtn: document.getElementById('startBtn'),
-      statsPanel: document.getElementById('statsPanel'),
-      maleStats: document.getElementById('maleStats'),
-      femaleStats: document.getElementById('femaleStats'),
       mainScreen: document.getElementById('mainScreen'),
       waitingScreen: document.getElementById('waitingScreen'),
       matchedScreen: document.getElementById('matchedScreen'),
@@ -2008,6 +2268,94 @@
       incomingCallPartnerName: document.getElementById('incomingCallPartnerName'),
       incomingCallPartnerInitial: document.getElementById('incomingCallPartnerInitial')
     };
+
+    // Google Authentication Functions
+    function handleCredentialResponse(response) {
+      // Decode the JWT token
+      const responsePayload = decodeJwtResponse(response.credential);
+      
+      googleUser = {
+        id: responsePayload.sub,
+        name: responsePayload.name,
+        email: responsePayload.email,
+        picture: responsePayload.picture
+      };
+      
+      isGoogleAuthenticated = true;
+      
+      // Update the UI
+      showUserProfile(googleUser);
+      
+      // Auto-fill username
+      myUsername = googleUser.name;
+      elements.usernameInput.value = myUsername;
+      
+      // Enable the start button if gender is also selected
+      checkFormValidity();
+      
+      console.log('Google Sign-In successful:', googleUser);
+    }
+    
+    function decodeJwtResponse(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    }
+    
+    function initiateGoogleSignIn() {
+      google.accounts.id.prompt();
+    }
+    
+    function showUserProfile(user) {
+      const userProfile = document.getElementById('userProfile');
+      const userAvatar = document.getElementById('userAvatar');
+      const userName = document.getElementById('userName');
+      const userEmail = document.getElementById('userEmail');
+      const authSection = document.getElementById('authSection');
+      
+      userAvatar.src = user.picture;
+      userName.textContent = user.name;
+      userEmail.textContent = user.email;
+      
+      userProfile.style.display = 'flex';
+      authSection.style.display = 'none';
+    }
+    
+    function signOut() {
+      google.accounts.id.disableAutoSelect();
+      googleUser = null;
+      isGoogleAuthenticated = false;
+      
+      // Reset UI
+      const userProfile = document.getElementById('userProfile');
+      const authSection = document.getElementById('authSection');
+      
+      userProfile.style.display = 'none';
+      authSection.style.display = 'block';
+      
+      // Clear username input
+      elements.usernameInput.value = '';
+      myUsername = null;
+      
+      checkFormValidity();
+    }
+    
+    function checkFormValidity() {
+      const hasUsername = myUsername || elements.usernameInput.value.trim();
+      const hasGender = myGender;
+      elements.startBtn.disabled = !(hasUsername && hasGender);
+    }
+    
+    // Initialize Google Sign-In when page loads
+    window.addEventListener('load', function() {
+      google.accounts.id.initialize({
+        client_id: '59001574467-2gf44nc69j4k8p7hlakuqed8unngn6hv.apps.googleusercontent.com',
+        callback: handleCredentialResponse
+      });
+    });
 
     function connect() {
       ws = new WebSocket('wss://chat-backend-4tpa.onrender.com');
@@ -2039,13 +2387,6 @@
       switch(data.type) {
         case 'welcome':
           myId = data.id;
-          if (data.stats) {
-            updateStats(data.stats);
-          }
-          break;
-          
-        case 'statsUpdate':
-          updateStats(data.stats);
           break;
           
         case 'waiting':
@@ -2057,7 +2398,15 @@
           currentState = 'matched';
           partnerInfo = data.partner;
           elements.partnerNameHeader.textContent = data.partner.username;
-          elements.partnerAvatar.textContent = data.partner.username[0].toUpperCase();
+          
+          // Handle Google profile picture if available
+          if (data.partner.googleUser && data.partner.googleUser.picture) {
+            elements.partnerAvatar.innerHTML = `<img src="${data.partner.googleUser.picture}" alt="${data.partner.username}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+          } else {
+            elements.partnerAvatar.textContent = data.partner.username[0].toUpperCase();
+            elements.partnerAvatar.innerHTML = ''; // Clear any existing image
+          }
+          
           elements.partnerStatus.textContent = 'Online';
           showMatchedScreen();
           if (soundEnabled) playNotification();
@@ -2110,20 +2459,38 @@
     }
 
     function checkFormValid() {
-      const username = elements.usernameInput.value.trim();
-      elements.startBtn.disabled = !username || !myGender;
+      const hasUsername = isGoogleAuthenticated && googleUser ? 
+        googleUser.name : elements.usernameInput.value.trim();
+      elements.startBtn.disabled = !hasUsername || !myGender;
     }
 
     function setProfile() {
-      const username = elements.usernameInput.value.trim();
+      // Use Google user data if available, otherwise use manual input
+      const username = isGoogleAuthenticated && googleUser ? 
+        googleUser.name : elements.usernameInput.value.trim();
+      
       if (!username || !myGender) return;
       
       myUsername = username;
-      ws.send(JSON.stringify({ 
+      
+      // Send profile data to server (include Google profile info if available)
+      const profileData = {
         type: 'setProfile', 
         username: myUsername,
         gender: myGender
-      }));
+      };
+      
+      // Add Google user data if authenticated
+      if (isGoogleAuthenticated && googleUser) {
+        profileData.googleUser = {
+          id: googleUser.id,
+          email: googleUser.email,
+          picture: googleUser.picture,
+          isGoogleAuth: true
+        };
+      }
+      
+      ws.send(JSON.stringify(profileData));
       
       currentState = 'online';
       showOnlineScreen();
@@ -2259,12 +2626,14 @@
       document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
     }
 
-    // Touch gesture handling for swipe-to-reply
+    // Touch gesture handling for swipe-to-reply and emoji reactions
     function initializeSwipeGestures() {
       let startX = 0;
       let startY = 0;
       let currentMessage = null;
       let isSwipeActive = false;
+      let touchStartTime = 0;
+      let longPressTimer = null;
 
       document.getElementById('chatMessages').addEventListener('touchstart', function(e) {
         const messageElement = e.target.closest('.message');
@@ -2274,10 +2643,29 @@
         startY = e.touches[0].clientY;
         currentMessage = messageElement;
         isSwipeActive = false;
+        touchStartTime = Date.now();
+        
+        // Set up long press for reactions
+        longPressTimer = setTimeout(() => {
+          if (currentMessage && !isSwipeActive) {
+            const messageData = JSON.parse(currentMessage.dataset.messageData || '{}');
+            showEmojiPicker(currentMessage, messageData);
+            // Add haptic feedback if available
+            if (navigator.vibrate) {
+              navigator.vibrate(50);
+            }
+          }
+        }, 500); // 500ms long press
       });
 
       document.getElementById('chatMessages').addEventListener('touchmove', function(e) {
         if (!currentMessage) return;
+        
+        // Clear long press timer on move
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+          longPressTimer = null;
+        }
         
         const deltaX = e.touches[0].clientX - startX;
         const deltaY = e.touches[0].clientY - startY;
@@ -2309,7 +2697,26 @@
       document.getElementById('chatMessages').addEventListener('touchend', function(e) {
         if (!currentMessage) return;
         
+        // Clear long press timer
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+          longPressTimer = null;
+        }
+        
         const deltaX = e.changedTouches[0].clientX - startX;
+        const touchDuration = Date.now() - touchStartTime;
+        
+        // Handle double tap for reactions
+        if (!isSwipeActive && touchDuration < 300 && Math.abs(deltaX) < 10) {
+          // Check for double tap
+          if (currentMessage.lastTapTime && (Date.now() - currentMessage.lastTapTime) < 300) {
+            const messageData = JSON.parse(currentMessage.dataset.messageData || '{}');
+            showEmojiPicker(currentMessage, messageData);
+            currentMessage.lastTapTime = 0;
+          } else {
+            currentMessage.lastTapTime = Date.now();
+          }
+        }
         
         if (isSwipeActive && Math.abs(deltaX) > 40) {
           if (deltaX > 0) {
@@ -2328,6 +2735,7 @@
         currentMessage.classList.remove('swiping-left', 'swiping-right');
         currentMessage = null;
         isSwipeActive = false;
+        touchStartTime = 0;
       });
     }
 
@@ -2395,7 +2803,10 @@
       
       messageHTML += '<div class="message-bubble">';
       
-      // Add reply reference if this is a reply
+      // Add the new message text first
+      messageHTML += `<div class="message-text">${escapeHtml(data.text)}</div>`;
+      
+      // Add reply reference below the message (WhatsApp style)
       if (data.replyTo) {
         messageHTML += `
           <div class="message-reply">
@@ -2404,8 +2815,6 @@
           </div>
         `;
       }
-      
-      messageHTML += `<div class="message-text">${escapeHtml(data.text)}</div>`;
       
       // Add reactions if any
       if (data.reactions && data.reactions.length > 0) {
@@ -2529,11 +2938,6 @@
       elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
     }
 
-    function updateStats(stats) {
-      elements.maleStats.textContent = `Waiting: ${stats.waiting.male}, Chatting: ${stats.matched.male}`;
-      elements.femaleStats.textContent = `Waiting: ${stats.waiting.female}, Chatting: ${stats.matched.female}`;
-    }
-
     function playNotification() {
       const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmLjAzuByvHZiDcIGmi67eeeTRAMUKfj8LZjHAY4kdfyz3QdB');
       audio.volume = 0.3;
@@ -2566,7 +2970,14 @@
     function showIncomingCall() {
       if (partnerInfo) {
         elements.incomingCallPartnerName.textContent = partnerInfo.username;
-        elements.incomingCallPartnerInitial.textContent = partnerInfo.username.charAt(0).toUpperCase();
+        
+        // Handle Google profile picture for incoming call avatar
+        if (partnerInfo.googleUser && partnerInfo.googleUser.picture) {
+          elements.incomingCallAvatar.innerHTML = `<img src="${partnerInfo.googleUser.picture}" alt="${partnerInfo.username}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+        } else {
+          elements.incomingCallPartnerInitial.textContent = partnerInfo.username.charAt(0).toUpperCase();
+          elements.incomingCallAvatar.innerHTML = `<span id="incomingCallPartnerInitial">${partnerInfo.username.charAt(0).toUpperCase()}</span>`;
+        }
       }
       
       isIncomingCall = true;
@@ -2760,12 +3171,22 @@
         isMuted = !isMuted;
         updateVoiceUI();
         updateCallScreenMute();
+        
+        // Add haptic feedback on mobile
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
       }
     }
     
     function toggleSpeaker() {
       isSpeakerOn = !isSpeakerOn;
       updateCallScreenSpeaker();
+      
+      // Add haptic feedback on mobile
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
       
       // Apply speaker mode to any active remote audio
       const remoteAudios = document.querySelectorAll('audio');
@@ -2890,7 +3311,14 @@
       if (partnerInfo) {
         // Update call screen with partner info
         elements.callPartnerName.textContent = partnerInfo.username;
-        elements.callPartnerInitial.textContent = partnerInfo.username.charAt(0).toUpperCase();
+        
+        // Handle Google profile picture for call screen avatar
+        if (partnerInfo.googleUser && partnerInfo.googleUser.picture) {
+          elements.callAvatar.innerHTML = `<img src="${partnerInfo.googleUser.picture}" alt="${partnerInfo.username}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+        } else {
+          elements.callPartnerInitial.textContent = partnerInfo.username.charAt(0).toUpperCase();
+          elements.callAvatar.innerHTML = `<span id="callPartnerInitial">${partnerInfo.username.charAt(0).toUpperCase()}</span>`;
+        }
       }
       
       elements.callScreen.classList.remove('hidden');
@@ -2902,6 +3330,11 @@
       // Start call timer only when call is connected
       callStartTime = Date.now();
       callTimerInterval = setInterval(updateCallTimer, 1000);
+      
+      // Start the quiz game
+      setTimeout(() => {
+        startQuiz();
+      }, 2000); // Start quiz 2 seconds after call connects
     }
     
     function hideCallScreen() {
@@ -2950,6 +3383,166 @@
         elements.speakerBtn.classList.add('earpiece');
         elements.speakerBtn.title = 'Switch to Speaker';
       }
+    }
+
+    // Quiz Game Functions
+    let currentQuestionIndex = 0;
+    let quizTimer = null;
+    let timeLeft = 30;
+    let userAnswer = null;
+    let partnerAnswer = null;
+
+    const quizQuestions = [
+      {
+        question: "What's your favorite movie genre?",
+        options: ["Action Movies", "Comedy Movies", "Drama Movies", "Horror Movies"]
+      },
+      {
+        question: "What's your ideal vacation?",
+        options: ["Beach Resort", "Mountain Adventure", "City Exploration", "Home Staycation"]
+      },
+      {
+        question: "What's your favorite food?",
+        options: ["Pizza", "Sushi", "Burgers", "Pasta"]
+      },
+      {
+        question: "What's your favorite time of day?",
+        options: ["Morning", "Afternoon", "Evening", "Night"]
+      },
+      {
+        question: "What's your favorite season?",
+        options: ["Spring", "Summer", "Fall", "Winter"]
+      },
+      {
+        question: "What's your dream job?",
+        options: ["Artist/Creative", "Entrepreneur", "Teacher", "Traveler/Explorer"]
+      },
+      {
+        question: "What's your favorite hobby?",
+        options: ["Reading", "Gaming", "Sports", "Music"]
+      }
+    ];
+
+    function startQuiz() {
+      currentQuestionIndex = 0;
+      showCurrentQuestion();
+      startQuizTimer();
+    }
+
+    function showCurrentQuestion() {
+      if (currentQuestionIndex >= quizQuestions.length) {
+        endQuiz();
+        return;
+      }
+
+      const question = quizQuestions[currentQuestionIndex];
+      document.getElementById('quizQuestion').textContent = question.question;
+      
+      const optionsContainer = document.getElementById('quizOptions');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'quiz-option';
+        button.textContent = option;
+        button.onclick = () => selectQuizAnswer(index);
+        optionsContainer.appendChild(button);
+      });
+
+      document.getElementById('quizResults').classList.add('hidden');
+      userAnswer = null;
+      partnerAnswer = null;
+      timeLeft = 30;
+    }
+
+    function selectQuizAnswer(answerIndex) {
+      userAnswer = answerIndex;
+      
+      // Visual feedback
+      const options = document.querySelectorAll('.quiz-option');
+      options.forEach((opt, idx) => {
+        opt.classList.remove('selected');
+        if (idx === answerIndex) {
+          opt.classList.add('selected');
+        }
+      });
+
+      // Send answer to partner (simulate for now)
+      setTimeout(() => {
+        partnerAnswer = Math.floor(Math.random() * 4); // Random partner answer
+        showQuizResult();
+      }, 1000);
+    }
+
+    function showQuizResult() {
+      const options = document.querySelectorAll('.quiz-option');
+      const question = quizQuestions[currentQuestionIndex];
+      
+      options.forEach((opt, idx) => {
+        opt.classList.remove('selected');
+        if (idx === userAnswer) {
+          opt.classList.add('correct');
+        }
+        if (idx === partnerAnswer && idx !== userAnswer) {
+          opt.classList.add('incorrect');
+        }
+      });
+
+      const resultText = document.getElementById('quizResultText');
+      const resultsDiv = document.getElementById('quizResults');
+      
+      if (userAnswer === partnerAnswer) {
+        resultText.innerHTML = `🎉 You both chose: <strong>${question.options[userAnswer]}</strong>! Great minds think alike!`;
+        resultText.style.color = '#10b981';
+      } else {
+        resultText.innerHTML = `You chose: <strong>${question.options[userAnswer]}</strong><br>Partner chose: <strong>${question.options[partnerAnswer]}</strong>`;
+        resultText.style.color = '#f59e0b';
+      }
+      
+      resultsDiv.classList.remove('hidden');
+      clearInterval(quizTimer);
+    }
+
+    function nextQuizQuestion() {
+      currentQuestionIndex++;
+      showCurrentQuestion();
+      startQuizTimer();
+    }
+
+    function startQuizTimer() {
+      timeLeft = 30;
+      updateTimerDisplay();
+      
+      quizTimer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        
+        if (timeLeft <= 0) {
+          // Auto-select random answer if time runs out
+          if (userAnswer === null) {
+            selectQuizAnswer(Math.floor(Math.random() * 4));
+          }
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      document.getElementById('quizTimer').textContent = timeLeft;
+    }
+
+    function endQuiz() {
+      document.getElementById('quizContent').innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+          <h3 style="color: #10b981; margin-bottom: 20px;">🎊 Quiz Complete!</h3>
+          <p style="color: #ffffff; font-size: 16px; margin-bottom: 30px;">
+            Great job getting to know each other! Continue your conversation in the chat.
+          </p>
+          <button class="quiz-next-btn" onclick="endVoiceCall()" style="background: #ef4444;">
+            End Call & Continue Chat
+          </button>
+        </div>
+      `;
+      clearInterval(quizTimer);
     }
 
     function formatTime(timestamp) {
