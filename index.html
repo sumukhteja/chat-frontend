@@ -343,66 +343,6 @@
       color: #6b7280;
       font-size: 14px;
     }
-    
-    /* Profile Picture Upload Styles */
-    .profile-picture-upload {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .profile-picture-preview {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 2px dashed #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      background: #f9fafb;
-    }
-    
-    .profile-picture-placeholder {
-      font-size: 24px;
-      color: #9ca3af;
-    }
-    
-    .profile-picture-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-    
-    .upload-btn, .remove-btn {
-      padding: 8px 16px;
-      border: 1px solid #d1d5db;
-      background: white;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
-    }
-    
-    .upload-btn:hover {
-      background: #f3f4f6;
-      border-color: #10b981;
-    }
-    
-    .remove-btn {
-      background: #fef2f2;
-      border-color: #fecaca;
-      color: #dc2626;
-    }
-    
-    .remove-btn:hover {
-      background: #fee2e2;
-      border-color: #fca5a5;
-    }
 
     /* Main Screen Layout */
     .main-screen {
@@ -672,7 +612,7 @@
       right: 10px;
     }
     
-    .reply-button, .react-button {
+    .reply-button, .react-button, .delete-button {
       background: #10b981;
       color: white;
       border: none;
@@ -688,9 +628,18 @@
       transition: all 0.2s ease;
     }
     
-    .reply-button:hover, .react-button:hover {
+    .reply-button:hover, .react-button:hover, .delete-button:hover {
       background: #059669;
       transform: scale(1.1);
+    }
+    
+    .delete-button {
+      background: #ef4444;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+    
+    .delete-button:hover {
+      background: #dc2626;
     }
     
     /* Message States */
@@ -1070,6 +1019,7 @@
       box-sizing: border-box;
       word-wrap: break-word;
       overflow-wrap: break-word;
+      overflow-y: hidden;
       appearance: none;
       -webkit-appearance: none;
     }
@@ -2605,20 +2555,6 @@
         <button onclick="signOut()" style="margin-left: auto; padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">Sign Out</button>
       </div>
       
-      <!-- Profile Picture Upload -->
-      <div class="form-group">
-        <label>Profile Picture (Optional):</label>
-        <div class="profile-picture-upload">
-          <div class="profile-picture-preview" id="profilePicturePreview">
-            <div class="profile-picture-placeholder">📸</div>
-            <img id="profileImagePreview" style="display: none;" alt="Profile Preview">
-          </div>
-          <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
-          <button type="button" class="upload-btn" onclick="triggerProfileUpload()">Choose Photo</button>
-          <button type="button" class="remove-btn" id="removeProfileBtn" onclick="removeProfilePicture()" style="display: none;">Remove</button>
-        </div>
-      </div>
-      
       <div class="form-group">
         <label>Gender:</label>
         <div class="gender-buttons">
@@ -2651,7 +2587,7 @@
       <div class="matched-screen hidden" id="matchedScreen">
         <!-- Chat Header -->
         <div class="chat-header">
-          <button class="back-btn" onclick="goToProfilePage()" title="Profile & Settings">⬅️</button>
+          <button class="back-btn" onclick="disconnectAndGoBack()" title="Back to Main">⬅️</button>
           <div class="partner-avatar" id="partnerAvatar">?</div>
           <div class="partner-info">
             <h4 id="partnerNameHeader" class="clickable-username" onclick="showPartnerProfile()">Partner</h4>
@@ -2679,7 +2615,7 @@
         
         <div class="input-area">
           <div class="input-container">
-            <button class="emoji-button">😊</button>
+            <button class="emoji-button" onclick="toggleInputEmojiPicker()">😊</button>
             <button class="voice-note-button" id="voiceNoteBtn" title="Hold to record voice note">🎤</button>
             <button class="image-button" id="imageBtn" title="Share image">📷</button>
             <textarea class="message-input" id="messageInput" placeholder="Type a message..." rows="1"></textarea>
@@ -2710,6 +2646,29 @@
             <button class="emoji-pick-button" onclick="addReaction('😊')">😊</button>
             <button class="emoji-pick-button" onclick="addReaction('🎉')">🎉</button>
             <button class="emoji-pick-button" onclick="addReaction('🔥')">🔥</button>
+          </div>
+        </div>
+        
+        <!-- Input Emoji Picker -->
+        <div class="emoji-picker" id="inputEmojiPicker">
+          <div class="emoji-picker-header">Add emoji to message</div>
+          <div class="emoji-picker-grid">
+            <button class="emoji-pick-button" onclick="insertEmoji('😊')">😊</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('😂')">😂</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('❤️')">❤️</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('😍')">😍</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('🤔')">🤔</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('😮')">😮</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('😢')">😢</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('😡')">😡</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('👍')">👍</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('👎')">👎</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('🎉')">🎉</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('🔥')">🔥</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('💕')">💕</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('✨')">✨</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('👋')">👋</button>
+            <button class="emoji-pick-button" onclick="insertEmoji('🙈')">🙈</button>
           </div>
         </div>
       </div>
@@ -2984,9 +2943,6 @@
       
       // Initialize image sharing
       initializeImageSharing();
-      
-      // Load saved profile picture
-      loadUserProfilePicture();
     });
 
     // Friend System Functions
@@ -3132,98 +3088,6 @@
       }
     }
 
-    // Profile Picture Upload Functions
-    let userProfilePicture = null;
-    
-    function triggerProfileUpload() {
-      document.getElementById('profilePictureInput').click();
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-      const profileInput = document.getElementById('profilePictureInput');
-      if (profileInput) {
-        profileInput.addEventListener('change', handleProfilePictureUpload);
-      }
-    });
-    
-    function handleProfilePictureUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      // Check file size (limit to 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        showNotification('Profile picture must be smaller than 5MB');
-        return;
-      }
-      
-      // Check file type
-      if (!file.type.startsWith('image/')) {
-        showNotification('Please select a valid image file');
-        return;
-      }
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imageData = e.target.result;
-        userProfilePicture = imageData;
-        
-        // Show preview
-        const preview = document.getElementById('profileImagePreview');
-        const placeholder = document.querySelector('.profile-picture-placeholder');
-        const removeBtn = document.getElementById('removeProfileBtn');
-        
-        preview.src = imageData;
-        preview.style.display = 'block';
-        placeholder.style.display = 'none';
-        removeBtn.style.display = 'inline-block';
-        
-        // Save to localStorage
-        localStorage.setItem('chattie_profile_picture', imageData);
-        
-        showNotification('Profile picture updated!');
-      };
-      
-      reader.readAsDataURL(file);
-    }
-    
-    function removeProfilePicture() {
-      userProfilePicture = null;
-      
-      // Reset preview
-      const preview = document.getElementById('profileImagePreview');
-      const placeholder = document.querySelector('.profile-picture-placeholder');
-      const removeBtn = document.getElementById('removeProfileBtn');
-      const input = document.getElementById('profilePictureInput');
-      
-      preview.style.display = 'none';
-      placeholder.style.display = 'block';
-      removeBtn.style.display = 'none';
-      input.value = '';
-      
-      // Remove from localStorage
-      localStorage.removeItem('chattie_profile_picture');
-      
-      showNotification('Profile picture removed');
-    }
-    
-    function loadUserProfilePicture() {
-      const stored = localStorage.getItem('chattie_profile_picture');
-      if (stored) {
-        userProfilePicture = stored;
-        
-        const preview = document.getElementById('profileImagePreview');
-        const placeholder = document.querySelector('.profile-picture-placeholder');
-        const removeBtn = document.getElementById('removeProfileBtn');
-        
-        if (preview && placeholder && removeBtn) {
-          preview.src = stored;
-          preview.style.display = 'block';
-          placeholder.style.display = 'none';
-          removeBtn.style.display = 'inline-block';
-        }
-      }
-    }
-
     // Friends Page Functions
     function showFriendsPage() {
       // Remove existing popup if any
@@ -3342,11 +3206,6 @@
       document.querySelectorAll('.gender-btn').forEach(btn => {
         btn.classList.remove('selected');
       });
-      
-      // Clear profile picture
-      if (userProfilePicture) {
-        removeProfilePicture();
-      }
       
       // Reset form state
       elements.startBtn.disabled = true;
@@ -3510,6 +3369,10 @@
           if (!data.fromMe && soundEnabled) playNotification();
           break;
           
+        case 'deleteMessage':
+          handleMessageDeletion(data);
+          break;
+          
         case 'reaction':
           handleReactionUpdate(data);
           break;
@@ -3592,11 +3455,6 @@
         };
       }
       
-      // Add custom profile picture if uploaded
-      if (userProfilePicture) {
-        profileData.customProfilePicture = userProfilePicture;
-      }
-      
       ws.send(JSON.stringify(profileData));
       
       currentState = 'online';
@@ -3674,9 +3532,17 @@
         endVoiceCall();
       }
       
-      // Disconnect from current partner and go back to matching
-      disconnect();
-      setTimeout(() => findMatch(), 500);
+      // Disconnect from current partner and go back to main online screen
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'disconnect' }));
+      }
+      
+      // Reset state and show main online screen
+      currentState = 'online';
+      partnerInfo = null;
+      lastMessageSender = null;
+      elements.chatMessages.innerHTML = '';
+      showOnlineScreen();
     }
     
     function goToProfilePage() {
@@ -3825,6 +3691,62 @@
       document.getElementById('emojiPicker').style.display = 'none';
       currentReactionMessage = null;
       document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
+    }
+    
+    // Input Emoji Functions
+    function toggleInputEmojiPicker() {
+      const picker = document.getElementById('inputEmojiPicker');
+      const isVisible = picker.style.display === 'block';
+      
+      if (isVisible) {
+        picker.style.display = 'none';
+        document.removeEventListener('click', closeInputEmojiPickerOnOutsideClick);
+      } else {
+        picker.style.display = 'block';
+        
+        // Position picker above the input area
+        const inputArea = document.querySelector('.input-area');
+        const rect = inputArea.getBoundingClientRect();
+        picker.style.position = 'fixed';
+        picker.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+        picker.style.left = rect.left + 'px';
+        picker.style.zIndex = '1000';
+        
+        setTimeout(() => {
+          document.addEventListener('click', closeInputEmojiPickerOnOutsideClick);
+        }, 100);
+      }
+    }
+    
+    function closeInputEmojiPickerOnOutsideClick(event) {
+      const picker = document.getElementById('inputEmojiPicker');
+      const emojiButton = document.querySelector('.emoji-button');
+      
+      if (!picker.contains(event.target) && event.target !== emojiButton) {
+        picker.style.display = 'none';
+        document.removeEventListener('click', closeInputEmojiPickerOnOutsideClick);
+      }
+    }
+    
+    function insertEmoji(emoji) {
+      const messageInput = elements.messageInput;
+      const cursorPos = messageInput.selectionStart;
+      const textBefore = messageInput.value.substring(0, cursorPos);
+      const textAfter = messageInput.value.substring(messageInput.selectionEnd);
+      
+      messageInput.value = textBefore + emoji + textAfter;
+      messageInput.selectionStart = messageInput.selectionEnd = cursorPos + emoji.length;
+      
+      // Update send button state
+      elements.sendBtn.disabled = !messageInput.value.trim();
+      elements.sendBtn.style.color = messageInput.value.trim() ? '#222222' : '#cccccc';
+      
+      // Close picker
+      document.getElementById('inputEmojiPicker').style.display = 'none';
+      document.removeEventListener('click', closeInputEmojiPickerOnOutsideClick);
+      
+      // Focus back on input
+      messageInput.focus();
     }
     
     // Voice Note Recording Functions
@@ -4261,6 +4183,43 @@
       sendTyping(false);
     }
 
+    function deleteMessage(messageId) {
+      // Confirm deletion
+      if (!confirm('Delete this message for both users?')) {
+        return;
+      }
+      
+      // Send delete request to server
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'deleteMessage',
+          messageId: messageId
+        }));
+      }
+      
+      // Remove message from DOM immediately for better UX
+      const messageElements = document.querySelectorAll('.message');
+      messageElements.forEach(msgElement => {
+        const msgData = JSON.parse(msgElement.dataset.messageData || '{}');
+        if (msgData.id === messageId) {
+          msgElement.remove();
+        }
+      });
+    }
+
+    function handleMessageDeletion(data) {
+      const messageId = data.messageId;
+      
+      // Remove message from DOM
+      const messageElements = document.querySelectorAll('.message');
+      messageElements.forEach(msgElement => {
+        const msgData = JSON.parse(msgElement.dataset.messageData || '{}');
+        if (msgData.id === messageId) {
+          msgElement.remove();
+        }
+      });
+    }
+
     function sendTyping(isTyping) {
       if (!ws || ws.readyState !== WebSocket.OPEN || currentState !== 'matched') return;
       ws.send(JSON.stringify({ type: 'typing', typing: isTyping }));
@@ -4297,6 +4256,7 @@
         </div>
         <div class="message-swipe-area right">
           <button class="react-button" onclick="showEmojiPicker(this.closest('.message'), ${escapeHtml(JSON.stringify(data))})">😊</button>
+          ${isOwn ? `<button class="delete-button" onclick="deleteMessage('${data.id}')">🗑️</button>` : ''}
         </div>
       `;
       
@@ -4441,6 +4401,7 @@
         </div>
         <div class="message-swipe-area right">
           <button class="react-button" onclick="showEmojiPicker(this.closest('.message'), ${escapeHtml(JSON.stringify(data))})">😊</button>
+          ${isOwn ? `<button class="delete-button" onclick="deleteMessage('${data.id}')">🗑️</button>` : ''}
         </div>
       `;
       
@@ -4512,6 +4473,7 @@
         </div>
         <div class="message-swipe-area right">
           <button class="react-button" onclick="showEmojiPicker(this.closest('.message'), ${escapeHtml(JSON.stringify(data))})">😊</button>
+          ${isOwn ? `<button class="delete-button" onclick="deleteMessage('${data.id}')">🗑️</button>` : ''}
         </div>
       `;
       
