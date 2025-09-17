@@ -228,6 +228,26 @@
       transform: none;
     }
     
+    .secondary-btn {
+      padding: 12px 16px;
+      background: #f3f4f6;
+      color: #374151;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .secondary-btn:hover {
+      background: #e5e7eb;
+      border-color: #d1d5db;
+      transform: translateY(-1px);
+    }
+    
     /* Google Sign-In Button Styles */
     .google-signin-container {
       margin-bottom: 24px;
@@ -324,6 +344,66 @@
       font-size: 14px;
     }
     
+    /* Profile Picture Upload Styles */
+    .profile-picture-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .profile-picture-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px dashed #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: #f9fafb;
+    }
+    
+    .profile-picture-placeholder {
+      font-size: 24px;
+      color: #9ca3af;
+    }
+    
+    .profile-picture-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    
+    .upload-btn, .remove-btn {
+      padding: 8px 16px;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .upload-btn:hover {
+      background: #f3f4f6;
+      border-color: #10b981;
+    }
+    
+    .remove-btn {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #dc2626;
+    }
+    
+    .remove-btn:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
     /* Main Screen Layout */
     .main-screen {
       flex: 1;
@@ -393,6 +473,27 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       flex-shrink: 0;
       min-height: 70px;
+      gap: 12px;
+    }
+    
+    .back-btn {
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    
+    .back-btn:hover {
+      background: #e5e7eb;
+      border-color: #d1d5db;
     }
     
     .partner-avatar {
@@ -430,6 +531,17 @@
       font-size: 13px;
       color: #10b981;
       font-weight: 500;
+    }
+    
+    .chat-call-timer {
+      margin: 2px 0 0 0;
+      font-size: 12px;
+      color: #ef4444;
+      font-weight: 600;
+      background: rgba(239, 68, 68, 0.1);
+      padding: 2px 6px;
+      border-radius: 6px;
+      display: inline-block;
     }
     
     .voice-controls {
@@ -618,6 +730,80 @@
     .message.other .message-bubble {
       background: #ffffff;
       color: #1f2937;
+    }
+    
+    .voice-note-bubble {
+      min-width: 200px;
+      max-width: 250px;
+    }
+    
+    .voice-note-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 0;
+    }
+    
+    .voice-play-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    
+    .voice-play-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .message.own .voice-play-btn {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .message.other .voice-play-btn {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .voice-waveform {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    
+    .voice-duration {
+      font-size: 12px;
+      opacity: 0.8;
+      font-weight: 500;
+    }
+    
+    .image-bubble {
+      padding: 4px;
+      max-width: 280px;
+    }
+    
+    .image-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .shared-image {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      transition: transform 0.2s ease;
+    }
+    
+    .shared-image:hover {
+      transform: scale(1.02);
     }
     
     .message-text {
@@ -914,6 +1100,56 @@
       background: #f3f4f6;
     }
     
+    .voice-note-button {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px;
+      margin-right: 4px;
+      border-radius: 50%;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      align-self: flex-end;
+      margin-bottom: 2px;
+      color: #6b7280;
+      -webkit-tap-highlight-color: transparent;
+      width: 24px;
+      height: 24px;
+    }
+    
+    .voice-note-button:hover {
+      background: #f3f4f6;
+    }
+    
+    .voice-note-button.recording {
+      background: #ef4444;
+      color: white;
+      animation: pulse 1s infinite;
+    }
+    
+    .image-button {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px;
+      margin-right: 4px;
+      border-radius: 50%;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      align-self: flex-end;
+      margin-bottom: 2px;
+      color: #6b7280;
+      -webkit-tap-highlight-color: transparent;
+      width: 24px;
+      height: 24px;
+    }
+    
+    .image-button:hover {
+      background: #f3f4f6;
+    }
+    
     .send-button {
       background: #10b981;
       border: none;
@@ -952,18 +1188,48 @@
     /* Mobile Text Input Enhancements */
     @media (max-width: 768px) {
       .input-area {
-        overflow: hidden;
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        padding: 8px 12px;
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 100;
+        min-height: auto;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
       }
       
       .input-container {
+        flex: 1;
+        min-width: 0;
+        max-width: calc(100% - 60px);
         overflow: hidden;
       }
       
+      .send-button {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+      }
+      
       .message-input {
+        font-size: 16px;
         overflow-y: auto;
         overflow-x: hidden;
         white-space: pre-wrap;
         word-break: break-word;
+        max-height: 100px;
       }
       
       /* Prevent zoom on focus for iOS */
@@ -1317,9 +1583,8 @@
         line-height: 1.4;
       }
       
-      .input-area {
-        padding: 12px 16px;
-        gap: 8px;
+      .chat-messages {
+        padding-bottom: 80px; /* Add space for fixed input */
       }
       
       .input-container {
@@ -1924,6 +2189,23 @@
       gap: 15px;
       margin-bottom: 20px;
     }
+
+    /* Mobile quiz options - 2 options only */
+    @media (max-width: 768px) {
+      .quiz-options {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .quiz-option {
+        padding: 18px 15px;
+        font-size: 16px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
     
     .quiz-option {
       background: rgba(255, 255, 255, 0.2);
@@ -1993,6 +2275,285 @@
       background: #059669;
       transform: translateY(-2px);
     }
+    
+    /* Notification Animations */
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+    
+    /* User Profile Popup */
+    .profile-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .profile-popup {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 400px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      animation: popIn 0.3s ease-out;
+    }
+    
+    .profile-popup-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .profile-popup-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #10b981 0%, #059669 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    
+    .profile-popup-info h3 {
+      margin: 0;
+      color: #1f2937;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .profile-popup-info p {
+      margin: 4px 0 0 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .profile-popup-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .profile-popup-btn {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    
+    .add-friend-btn {
+      background: #10b981;
+      color: white;
+    }
+    
+    .add-friend-btn:hover {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+    
+    .close-popup-btn {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    
+    .close-popup-btn:hover {
+      background: #e5e7eb;
+    }
+    
+    .clickable-username {
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    
+    .clickable-username:hover {
+      color: #10b981;
+      text-decoration: underline;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    /* Friends Page Styles */
+    .friends-page {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      animation: popIn 0.3s ease-out;
+    }
+    
+    .friends-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .friends-back-btn {
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    
+    .friends-back-btn:hover {
+      background: #e5e7eb;
+      border-color: #d1d5db;
+    }
+    
+    .friends-page-header h3 {
+      margin: 0;
+      color: #1f2937;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .friends-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .friend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      transition: all 0.2s ease;
+    }
+    
+    .friend-item:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+    
+    .friend-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #10b981 0%, #059669 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    .friend-info {
+      flex: 1;
+    }
+    
+    .friend-info h4 {
+      margin: 0;
+      color: #1f2937;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .friend-info p {
+      margin: 4px 0 0 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .friend-date {
+      color: #9ca3af;
+      font-size: 12px;
+      text-align: right;
+    }
+    
+    .no-friends-message {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+    }
+    
+    .no-friends-message h4 {
+      margin: 0 0 8px 0;
+      color: #374151;
+      font-size: 18px;
+    }
+    
+    .no-friends-message p {
+      margin: 0;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -2044,14 +2605,37 @@
         <button onclick="signOut()" style="margin-left: auto; padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">Sign Out</button>
       </div>
       
+      <!-- Profile Picture Upload -->
+      <div class="form-group">
+        <label>Profile Picture:</label>
+        <div class="profile-picture-upload">
+          <div class="profile-picture-preview" id="profilePicturePreview">
+            <div class="profile-picture-placeholder">📸</div>
+            <img id="profileImagePreview" style="display: none;" alt="Profile Preview">
+          </div>
+          <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+          <button type="button" class="upload-btn" onclick="triggerProfileUpload()">Choose Photo</button>
+          <button type="button" class="remove-btn" id="removeProfileBtn" onclick="removeProfilePicture()" style="display: none;">Remove</button>
+        </div>
+      </div>
+      
       <div class="form-group">
         <label>Gender:</label>
         <div class="gender-buttons">
-          <button class="gender-btn" data-gender="male" onclick="selectGender('male')">Guy</button>
-          <button class="gender-btn" data-gender="female" onclick="selectGender('female')">Girl</button>
+          <button class="gender-btn" data-gender="male" onclick="selectGender('male')">Male</button>
+          <button class="gender-btn" data-gender="female" onclick="selectGender('female')">Female</button>
         </div>
       </div>
       <button class="start-btn" id="startBtn" onclick="setProfile()" disabled>Start Matching</button>
+      
+      <div style="margin-top: 16px; display: flex; gap: 12px;">
+        <button class="secondary-btn" onclick="showFriendsPage()" style="flex: 1;">
+          👥 Friends (<span id="friendsCount">0</span>)
+        </button>
+        <button class="secondary-btn" onclick="signOutFromProfile()" style="flex: 1; background: #fee2e2; color: #dc2626; border-color: #fecaca;">
+          🚪 Sign Out
+        </button>
+      </div>
     </div>
     
     <!-- Main Screen -->
@@ -2067,10 +2651,12 @@
       <div class="matched-screen hidden" id="matchedScreen">
         <!-- Chat Header -->
         <div class="chat-header">
+          <button class="back-btn" onclick="disconnectAndGoBack()" title="Find New Partner">⬅️</button>
           <div class="partner-avatar" id="partnerAvatar">?</div>
           <div class="partner-info">
-            <h4 id="partnerNameHeader">Partner</h4>
+            <h4 id="partnerNameHeader" class="clickable-username" onclick="showPartnerProfile()">Partner</h4>
             <p id="partnerStatus">Online</p>
+            <div class="chat-call-timer hidden" id="chatCallTimer">📞 00:00</div>
           </div>
           <div class="voice-controls">
             <button class="voice-btn" id="startCallBtn" onclick="startVoiceCall()" title="Start Voice Call">📞</button>
@@ -2094,6 +2680,8 @@
         <div class="input-area">
           <div class="input-container">
             <button class="emoji-button">😊</button>
+            <button class="voice-note-button" id="voiceNoteBtn" title="Hold to record voice note">🎤</button>
+            <button class="image-button" id="imageBtn" title="Share image">📷</button>
             <textarea class="message-input" id="messageInput" placeholder="Type a message..." rows="1"></textarea>
           </div>
           <button class="send-button" id="sendBtn" onclick="sendMessage()">
@@ -2102,6 +2690,9 @@
             </svg>
           </button>
         </div>
+        
+        <!-- Hidden file input for image sharing -->
+        <input type="file" id="imageInput" accept="image/*" capture="environment" style="display: none;" />
         
         <!-- Emoji Picker for Reactions -->
         <div class="emoji-picker" id="emojiPicker">
@@ -2211,6 +2802,10 @@
     let googleUser = null;
     let isGoogleAuthenticated = false;
     
+    // Friend System Variables
+    let friendsList = [];
+    let friendRequests = [];
+    
     let ws = null;
     let myId = null;
     let myUsername = null;
@@ -2236,6 +2831,17 @@
     let isIncomingCall = false;
     let callState = 'idle'; // idle, calling, ringing, connected
 
+    // Audio system variables
+    let audioContext = null;
+    let incomingCallAudio = null;
+    let currentRingtone = null;
+    
+    // Voice note recording variables
+    let mediaRecorder = null;
+    let recordingStream = null;
+    let recordingChunks = [];
+    let isRecording = false;
+
     const elements = {
       profileSetup: document.getElementById('profileSetup'),
       usernameInput: document.getElementById('usernameInput'),
@@ -2250,11 +2856,15 @@
       partnerAvatar: document.getElementById('partnerAvatar'),
       partnerStatus: document.getElementById('partnerStatus'),
       sendBtn: document.getElementById('sendBtn'),
+      voiceNoteBtn: document.getElementById('voiceNoteBtn'),
+      imageBtn: document.getElementById('imageBtn'),
+      imageInput: document.getElementById('imageInput'),
       startCallBtn: document.getElementById('startCallBtn'),
       endCallBtn: document.getElementById('endCallBtn'),
       muteBtn: document.getElementById('muteBtn'),
       callScreen: document.getElementById('callScreen'),
       callTimer: document.getElementById('callTimer'),
+      chatCallTimer: document.getElementById('chatCallTimer'),
       callAvatar: document.getElementById('callAvatar'),
       callPartnerName: document.getElementById('callPartnerName'),
       callPartnerInitial: document.getElementById('callPartnerInitial'),
@@ -2286,11 +2896,10 @@
       // Update the UI
       showUserProfile(googleUser);
       
-      // Auto-fill username
-      myUsername = googleUser.name;
-      elements.usernameInput.value = myUsername;
+      // Don't auto-fill username - let user choose their own
+      // Keep username input visible and editable
       
-      // Enable the start button if gender is also selected
+      // Enable the start button if gender is also selected and username is filled
       checkFormValidity();
       
       console.log('Google Sign-In successful:', googleUser);
@@ -2321,7 +2930,18 @@
       userEmail.textContent = user.email;
       
       userProfile.style.display = 'flex';
-      authSection.style.display = 'none';
+      
+      // Keep auth section visible but hide the Google sign-in button
+      const googleSigninContainer = authSection.querySelector('.google-signin-container');
+      if (googleSigninContainer) {
+        googleSigninContainer.style.display = 'none';
+      }
+      
+      // Hide the divider since Google sign-in is hidden
+      const divider = authSection.querySelector('.divider');
+      if (divider) {
+        divider.style.display = 'none';
+      }
     }
     
     function signOut() {
@@ -2355,7 +2975,480 @@
         client_id: '59001574467-2gf44nc69j4k8p7hlakuqed8unngn6hv.apps.googleusercontent.com',
         callback: handleCredentialResponse
       });
+      
+      // Initialize friend system
+      loadFriendsList();
+      
+      // Initialize voice note recording
+      initializeVoiceNoteRecording();
+      
+      // Initialize image sharing
+      initializeImageSharing();
+      
+      // Load saved profile picture
+      loadUserProfilePicture();
     });
+
+    // Friend System Functions
+    function loadFriendsList() {
+      const stored = localStorage.getItem('chattie_friends');
+      if (stored) {
+        friendsList = JSON.parse(stored);
+      }
+      updateFriendsCount();
+    }
+    
+    function saveFriendsList() {
+      localStorage.setItem('chattie_friends', JSON.stringify(friendsList));
+    }
+    
+    function addFriend(partnerData) {
+      // Check if already a friend
+      const existingFriend = friendsList.find(friend => 
+        (friend.googleId && partnerData.googleUser && friend.googleId === partnerData.googleUser.id) ||
+        (friend.username === partnerData.username && friend.gender === partnerData.gender)
+      );
+      
+      if (existingFriend) {
+        showNotification('This user is already in your friends list!');
+        return;
+      }
+      
+      const newFriend = {
+        username: partnerData.username,
+        gender: partnerData.gender,
+        googleId: partnerData.googleUser ? partnerData.googleUser.id : null,
+        googleEmail: partnerData.googleUser ? partnerData.googleUser.email : null,
+        googlePicture: partnerData.googleUser ? partnerData.googleUser.picture : null,
+        addedDate: new Date().toISOString()
+      };
+      
+      friendsList.push(newFriend);
+      saveFriendsList();
+      updateFriendsCount();
+      showNotification(`${partnerData.username} has been added to your friends list!`);
+    }
+    
+    function showNotification(message) {
+      // Simple notification system
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 10000;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-in forwards';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // Audio System Functions
+    function initializeAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioContext;
+    }
+    
+    function createTone(frequency, duration, type = 'sine') {
+      const ctx = initializeAudioContext();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.1);
+      gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + duration);
+      
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + duration);
+      
+      return { oscillator, gainNode };
+    }
+    
+    function playIncomingCallRingtone() {
+      stopCurrentRingtone();
+      
+      const playRingSequence = () => {
+        // Create a pleasant double ring pattern
+        createTone(800, 0.4); // First ring
+        setTimeout(() => {
+          createTone(600, 0.4); // Second ring (lower pitch)
+        }, 500);
+      };
+      
+      // Play immediately, then repeat every 2 seconds
+      playRingSequence();
+      currentRingtone = setInterval(playRingSequence, 2000);
+    }
+    
+    function playCallDeclinedSound() {
+      stopCurrentRingtone();
+      // Play a descending tone sequence for decline
+      createTone(400, 0.3);
+      setTimeout(() => createTone(300, 0.3), 200);
+      setTimeout(() => createTone(200, 0.4), 400);
+    }
+    
+    function playCallEndSound() {
+      stopCurrentRingtone();
+      // Play a simple end tone
+      createTone(300, 0.5, 'square');
+    }
+    
+    function playCallConnectedSound() {
+      stopCurrentRingtone();
+      // Play a pleasant connected sound
+      createTone(600, 0.2);
+      setTimeout(() => createTone(800, 0.3), 150);
+    }
+    
+    function stopCurrentRingtone() {
+      if (currentRingtone) {
+        clearInterval(currentRingtone);
+        currentRingtone = null;
+      }
+    }
+
+    // Profile Picture Upload Functions
+    let userProfilePicture = null;
+    
+    function triggerProfileUpload() {
+      document.getElementById('profilePictureInput').click();
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileInput = document.getElementById('profilePictureInput');
+      if (profileInput) {
+        profileInput.addEventListener('change', handleProfilePictureUpload);
+      }
+    });
+    
+    function handleProfilePictureUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showNotification('Profile picture must be smaller than 5MB');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        showNotification('Please select a valid image file');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imageData = e.target.result;
+        userProfilePicture = imageData;
+        
+        // Show preview
+        const preview = document.getElementById('profileImagePreview');
+        const placeholder = document.querySelector('.profile-picture-placeholder');
+        const removeBtn = document.getElementById('removeProfileBtn');
+        
+        preview.src = imageData;
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+        removeBtn.style.display = 'inline-block';
+        
+        // Save to localStorage
+        localStorage.setItem('chattie_profile_picture', imageData);
+        
+        showNotification('Profile picture updated!');
+      };
+      
+      reader.readAsDataURL(file);
+    }
+    
+    function removeProfilePicture() {
+      userProfilePicture = null;
+      
+      // Reset preview
+      const preview = document.getElementById('profileImagePreview');
+      const placeholder = document.querySelector('.profile-picture-placeholder');
+      const removeBtn = document.getElementById('removeProfileBtn');
+      const input = document.getElementById('profilePictureInput');
+      
+      preview.style.display = 'none';
+      placeholder.style.display = 'block';
+      removeBtn.style.display = 'none';
+      input.value = '';
+      
+      // Remove from localStorage
+      localStorage.removeItem('chattie_profile_picture');
+      
+      showNotification('Profile picture removed');
+    }
+    
+    function loadUserProfilePicture() {
+      const stored = localStorage.getItem('chattie_profile_picture');
+      if (stored) {
+        userProfilePicture = stored;
+        
+        const preview = document.getElementById('profileImagePreview');
+        const placeholder = document.querySelector('.profile-picture-placeholder');
+        const removeBtn = document.getElementById('removeProfileBtn');
+        
+        if (preview && placeholder && removeBtn) {
+          preview.src = stored;
+          preview.style.display = 'block';
+          placeholder.style.display = 'none';
+          removeBtn.style.display = 'inline-block';
+        }
+      }
+    }
+
+    // Friends Page Functions
+    function showFriendsPage() {
+      // Remove existing popup if any
+      const existingPopup = document.querySelector('.profile-popup-overlay');
+      if (existingPopup) {
+        document.body.removeChild(existingPopup);
+      }
+      
+      // Create popup overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'profile-popup-overlay';
+      
+      // Create friends page content
+      const friendsPage = document.createElement('div');
+      friendsPage.className = 'friends-page';
+      
+      let friendsHTML = `
+        <div class="friends-page-header">
+          <button class="friends-back-btn" onclick="closeFriendsPage()">⬅️</button>
+          <h3>👥 My Friends (${friendsList.length})</h3>
+        </div>
+      `;
+      
+      if (friendsList.length === 0) {
+        friendsHTML += `
+          <div class="no-friends-message">
+            <h4>No friends yet</h4>
+            <p>Start chatting and click on usernames to add friends!</p>
+          </div>
+        `;
+      } else {
+        friendsHTML += '<div class="friends-list">';
+        
+        friendsList.forEach(friend => {
+          const addedDate = new Date(friend.addedDate).toLocaleDateString();
+          let avatarContent = '';
+          
+          if (friend.googlePicture) {
+            avatarContent = `<img src="${friend.googlePicture}" alt="${friend.username}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+          } else {
+            avatarContent = friend.username.charAt(0).toUpperCase();
+          }
+          
+          friendsHTML += `
+            <div class="friend-item">
+              <div class="friend-avatar">${avatarContent}</div>
+              <div class="friend-info">
+                <h4>${friend.username}</h4>
+                <p>${friend.gender === 'male' ? 'Male' : 'Female'}${friend.googleEmail ? ' • ' + friend.googleEmail : ''}</p>
+              </div>
+              <div class="friend-date">
+                Added ${addedDate}
+              </div>
+            </div>
+          `;
+        });
+        
+        friendsHTML += '</div>';
+      }
+      
+      friendsHTML += `
+        <div class="profile-popup-actions" style="margin-top: 20px;">
+          <button class="profile-popup-btn close-popup-btn" onclick="closeFriendsPage()">Close</button>
+        </div>
+      `;
+      
+      friendsPage.innerHTML = friendsHTML;
+      overlay.appendChild(friendsPage);
+      document.body.appendChild(overlay);
+      
+      // Close popup when clicking overlay
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          closeFriendsPage();
+        }
+      });
+    }
+    
+    function closeFriendsPage() {
+      const popup = document.querySelector('.profile-popup-overlay');
+      if (popup) {
+        popup.style.animation = 'fadeOut 0.3s ease-in forwards';
+        setTimeout(() => {
+          if (popup.parentNode) {
+            document.body.removeChild(popup);
+          }
+        }, 300);
+      }
+    }
+    
+    function updateFriendsCount() {
+      const friendsCountElement = document.getElementById('friendsCount');
+      if (friendsCountElement) {
+        friendsCountElement.textContent = friendsList.length;
+      }
+    }
+
+    // Profile Sign Out Function
+    function signOutFromProfile() {
+      // Show confirmation dialog
+      if (!confirm('Are you sure you want to sign out? You will need to sign in again.')) {
+        return;
+      }
+      
+      // Sign out from Google if authenticated
+      if (isGoogleAuthenticated) {
+        signOut();
+      }
+      
+      // Clear all user data
+      elements.usernameInput.value = '';
+      myUsername = null;
+      myGender = null;
+      
+      // Reset gender buttons
+      document.querySelectorAll('.gender-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      
+      // Clear profile picture
+      if (userProfilePicture) {
+        removeProfilePicture();
+      }
+      
+      // Reset form state
+      elements.startBtn.disabled = true;
+      
+      // Disconnect from WebSocket if connected
+      if (ws) {
+        ws.close();
+        ws = null;
+      }
+      
+      // Reset state
+      currentState = 'profile';
+      
+      // Show success message
+      showNotification('Successfully signed out!');
+    }
+
+    function showPartnerProfile() {
+      if (!partnerInfo) return;
+      
+      createProfilePopup(partnerInfo);
+    }
+    
+    function createProfilePopup(userData) {
+      // Remove existing popup if any
+      const existingPopup = document.querySelector('.profile-popup-overlay');
+      if (existingPopup) {
+        document.body.removeChild(existingPopup);
+      }
+      
+      // Create popup overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'profile-popup-overlay';
+      
+      // Create popup content
+      const popup = document.createElement('div');
+      popup.className = 'profile-popup';
+      
+      // Create avatar content
+      let avatarContent = '';
+      if (userData.googleUser && userData.googleUser.picture) {
+        avatarContent = `<img src="${userData.googleUser.picture}" alt="${userData.username}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+      } else {
+        avatarContent = userData.username.charAt(0).toUpperCase();
+      }
+      
+      // Check if user is already a friend
+      const isFriend = friendsList.some(friend => 
+        (friend.googleId && userData.googleUser && friend.googleId === userData.googleUser.id) ||
+        (friend.username === userData.username && friend.gender === userData.gender)
+      );
+      
+      popup.innerHTML = `
+        <div class="profile-popup-header">
+          <div class="profile-popup-avatar">${avatarContent}</div>
+          <div class="profile-popup-info">
+            <h3>${userData.username}</h3>
+            <p>${userData.gender === 'male' ? 'Male' : 'Female'}${userData.googleUser && userData.googleUser.email ? ' • ' + userData.googleUser.email : ''}</p>
+          </div>
+        </div>
+        <div class="profile-popup-actions">
+          ${isFriend ? 
+            '<button class="profile-popup-btn close-popup-btn" style="flex: 2;">Already Friends ✓</button>' :
+            '<button class="profile-popup-btn add-friend-btn" onclick="handleAddFriend()">Add Friend</button>'
+          }
+          <button class="profile-popup-btn close-popup-btn" onclick="closeProfilePopup()">Close</button>
+        </div>
+      `;
+      
+      overlay.appendChild(popup);
+      document.body.appendChild(overlay);
+      
+      // Store current user data for add friend action
+      window.currentProfileData = userData;
+      
+      // Close popup when clicking overlay
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          closeProfilePopup();
+        }
+      });
+    }
+    
+    function closeProfilePopup() {
+      const popup = document.querySelector('.profile-popup-overlay');
+      if (popup) {
+        popup.style.animation = 'fadeOut 0.3s ease-in forwards';
+        setTimeout(() => {
+          if (popup.parentNode) {
+            document.body.removeChild(popup);
+          }
+          window.currentProfileData = null;
+        }, 300);
+      }
+    }
+    
+    function handleAddFriend() {
+      if (window.currentProfileData) {
+        addFriend(window.currentProfileData);
+        closeProfilePopup();
+      }
+    }
 
     function connect() {
       ws = new WebSocket('wss://chat-backend-4tpa.onrender.com');
@@ -2421,6 +3514,16 @@
           handleReactionUpdate(data);
           break;
           
+        case 'voiceNote':
+          displayVoiceNote(data);
+          if (!data.fromMe && soundEnabled) playNotification();
+          break;
+          
+        case 'image':
+          displayImage(data);
+          if (!data.fromMe && soundEnabled) playNotification();
+          break;
+          
         case 'typing':
           if (data.typing) {
             elements.typingIndicator.innerHTML = `
@@ -2465,9 +3568,8 @@
     }
 
     function setProfile() {
-      // Use Google user data if available, otherwise use manual input
-      const username = isGoogleAuthenticated && googleUser ? 
-        googleUser.name : elements.usernameInput.value.trim();
+      // Always use the username input field (user's choice)
+      const username = elements.usernameInput.value.trim();
       
       if (!username || !myGender) return;
       
@@ -2488,6 +3590,11 @@
           picture: googleUser.picture,
           isGoogleAuth: true
         };
+      }
+      
+      // Add custom profile picture if uploaded
+      if (userProfilePicture) {
+        profileData.customProfilePicture = userProfilePicture;
       }
       
       ws.send(JSON.stringify(profileData));
@@ -2560,6 +3667,17 @@
       disconnect();
       setTimeout(() => findMatch(), 500);
     }
+    
+    function disconnectAndGoBack() {
+      // End any active call first
+      if (!elements.endCallBtn.classList.contains('hidden')) {
+        endVoiceCall();
+      }
+      
+      // Disconnect from current partner and go back to matching
+      disconnect();
+      setTimeout(() => findMatch(), 500);
+    }
 
     // Reply functionality
     let replyingTo = null;
@@ -2623,6 +3741,297 @@
       document.getElementById('emojiPicker').style.display = 'none';
       currentReactionMessage = null;
       document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
+    }
+    
+    // Voice Note Recording Functions
+    function initializeVoiceNoteRecording() {
+      const voiceBtn = elements.voiceNoteBtn;
+      
+      // Mouse events for desktop
+      voiceBtn.addEventListener('mousedown', startVoiceRecording);
+      voiceBtn.addEventListener('mouseup', stopVoiceRecording);
+      voiceBtn.addEventListener('mouseleave', stopVoiceRecording);
+      
+      // Touch events for mobile
+      voiceBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        startVoiceRecording();
+      });
+      voiceBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        stopVoiceRecording();
+      });
+      voiceBtn.addEventListener('touchcancel', stopVoiceRecording);
+    }
+    
+    async function startVoiceRecording() {
+      if (isRecording) return;
+      
+      try {
+        recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        recordingChunks = [];
+        
+        mediaRecorder = new MediaRecorder(recordingStream);
+        
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            recordingChunks.push(event.data);
+          }
+        };
+        
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(recordingChunks, { type: 'audio/webm' });
+          sendVoiceNote(audioBlob);
+          recordingStream.getTracks().forEach(track => track.stop());
+          recordingStream = null;
+        };
+        
+        mediaRecorder.start();
+        isRecording = true;
+        
+        // Update button appearance
+        elements.voiceNoteBtn.classList.add('recording');
+        elements.voiceNoteBtn.innerHTML = '🔴';
+        
+      } catch (error) {
+        console.error('Error accessing microphone:', error);
+        alert('Cannot access microphone. Please check permissions.');
+      }
+    }
+    
+    function stopVoiceRecording() {
+      if (!isRecording || !mediaRecorder) return;
+      
+      mediaRecorder.stop();
+      isRecording = false;
+      
+      // Reset button appearance
+      elements.voiceNoteBtn.classList.remove('recording');
+      elements.voiceNoteBtn.innerHTML = '🎤';
+    }
+    
+    function sendVoiceNote(audioBlob) {
+      // Convert audio blob to base64 for transmission
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Audio = reader.result.split(',')[1];
+        
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'voiceNote',
+            audio: base64Audio,
+            duration: recordingChunks.length // Approximate duration
+          }));
+        }
+      };
+      reader.readAsDataURL(audioBlob);
+    }
+    
+    function playVoiceNote(button, base64Audio) {
+      // Convert base64 to audio blob
+      const audioData = base64Audio;
+      const byteCharacters = atob(audioData);
+      const byteArrays = [];
+      
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+        
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+        
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+      
+      const audioBlob = new Blob(byteArrays, { type: 'audio/webm' });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      const audio = new Audio(audioUrl);
+      
+      // Update button appearance
+      button.innerHTML = '⏸️';
+      button.disabled = true;
+      
+      audio.onended = () => {
+        button.innerHTML = '▶️';
+        button.disabled = false;
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      audio.onerror = () => {
+        button.innerHTML = '▶️';
+        button.disabled = false;
+        URL.revokeObjectURL(audioUrl);
+        console.error('Error playing voice note');
+      };
+      
+      audio.play().catch(error => {
+        console.error('Error playing audio:', error);
+        button.innerHTML = '▶️';
+        button.disabled = false;
+        URL.revokeObjectURL(audioUrl);
+      });
+    }
+    
+    // Image Sharing Functions
+    function initializeImageSharing() {
+      const imageBtn = elements.imageBtn;
+      const imageInput = elements.imageInput;
+      
+      // Click image button to trigger file input
+      imageBtn.addEventListener('click', () => {
+        imageInput.click();
+      });
+      
+      // Handle file selection
+      imageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          handleImageSelection(file);
+        }
+        // Reset input
+        event.target.value = '';
+      });
+    }
+    
+    function handleImageSelection(file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image too large. Please select an image smaller than 5MB.');
+        return;
+      }
+      
+      // Check if it's actually an image
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file.');
+        return;
+      }
+      
+      // Read and compress the image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Resize image to max 800px width while maintaining aspect ratio
+          const maxWidth = 800;
+          const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
+          canvas.width = img.width * ratio;
+          canvas.height = img.height * ratio;
+          
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          // Convert to base64 with compression
+          canvas.toBlob((blob) => {
+            const compressedReader = new FileReader();
+            compressedReader.onload = () => {
+              const base64Image = compressedReader.result.split(',')[1];
+              sendImage(base64Image, canvas.width, canvas.height);
+            };
+            compressedReader.readAsDataURL(blob);
+          }, 'image/jpeg', 0.8); // 80% quality
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+    
+    function sendImage(base64Image, width, height) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'image',
+          image: base64Image,
+          width: width,
+          height: height
+        }));
+      }
+    }
+    
+    function openImageModal(imageSrc) {
+      // Create modal overlay
+      const modal = document.createElement('div');
+      modal.className = 'image-modal-overlay';
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        cursor: pointer;
+      `;
+      
+      // Create image element
+      const img = document.createElement('img');
+      img.src = imageSrc;
+      img.style.cssText = `
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        border-radius: 8px;
+      `;
+      
+      // Create close button
+      const closeBtn = document.createElement('button');
+      closeBtn.innerHTML = '✕';
+      closeBtn.style.cssText = `
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.2s;
+      `;
+      
+      closeBtn.addEventListener('mouseenter', () => {
+        closeBtn.style.background = 'rgba(255, 255, 255, 0.3)';
+      });
+      
+      closeBtn.addEventListener('mouseleave', () => {
+        closeBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+      });
+      
+      // Close modal function
+      const closeModal = () => {
+        document.body.removeChild(modal);
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+      
+      // Handle escape key
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      };
+      
+      // Event listeners
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+      
+      closeBtn.addEventListener('click', closeModal);
+      document.addEventListener('keydown', handleKeyDown);
+      
+      // Add elements to modal
+      modal.appendChild(img);
+      modal.appendChild(closeBtn);
+      document.body.appendChild(modal);
     }
 
     // Touch gesture handling for swipe-to-reply and emoji reactions
@@ -2909,6 +4318,147 @@
         }
       }
     }
+    
+    function displayVoiceNote(data) {
+      const isOwn = data.fromMe;
+      const senderChanged = lastMessageSender !== (isOwn ? 'me' : 'partner');
+      
+      // Create message group if sender changed
+      if (senderChanged) {
+        createNewMessageGroup(isOwn);
+        lastMessageSender = isOwn ? 'me' : 'partner';
+      }
+      
+      // Add voice note to current group
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isOwn ? 'own' : 'other'}`;
+      
+      // Generate unique message ID if not provided
+      if (!data.id) {
+        data.id = 'voice_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+      
+      // Store message data for gestures
+      messageDiv.dataset.messageData = JSON.stringify(data);
+      
+      let messageHTML = '<div class="message-container">';
+      
+      // Add swipe areas
+      messageHTML += `
+        <div class="message-swipe-area left">
+          <button class="reply-button" onclick="setReply(${escapeHtml(JSON.stringify(data))})">↩</button>
+        </div>
+        <div class="message-swipe-area right">
+          <button class="react-button" onclick="showEmojiPicker(this.closest('.message'), ${escapeHtml(JSON.stringify(data))})">😊</button>
+        </div>
+      `;
+      
+      // Voice note bubble
+      messageHTML += '<div class="message-bubble voice-note-bubble">';
+      messageHTML += `
+        <div class="voice-note-content">
+          <button class="voice-play-btn" onclick="playVoiceNote(this, '${data.audio}')" title="Play voice note">
+            ▶️
+          </button>
+          <div class="voice-waveform">
+            <span class="voice-duration">${data.duration || '0'}s</span>
+          </div>
+        </div>
+      `;
+      
+      // Add timestamp
+      const timestamp = new Date(data.timestamp || Date.now()).toLocaleTimeString('en-US', {
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: false
+      });
+      messageHTML += `<div class="message-time">${timestamp}</div>`;
+      
+      messageHTML += '</div></div>';
+      
+      messageDiv.innerHTML = messageHTML;
+      
+      // Add to current message group
+      const currentGroup = elements.chatMessages.lastElementChild;
+      if (currentGroup && currentGroup.className === 'message-group') {
+        currentGroup.appendChild(messageDiv);
+      } else {
+        elements.chatMessages.appendChild(messageDiv);
+      }
+      
+      // Scroll to bottom
+      elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+    }
+    
+    function displayImage(data) {
+      const isOwn = data.fromMe;
+      const senderChanged = lastMessageSender !== (isOwn ? 'me' : 'partner');
+      
+      // Create message group if sender changed
+      if (senderChanged) {
+        createNewMessageGroup(isOwn);
+        lastMessageSender = isOwn ? 'me' : 'partner';
+      }
+      
+      // Add image to current group
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isOwn ? 'own' : 'other'}`;
+      
+      // Generate unique message ID if not provided
+      if (!data.id) {
+        data.id = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+      
+      // Store message data for gestures
+      messageDiv.dataset.messageData = JSON.stringify(data);
+      
+      let messageHTML = '<div class="message-container">';
+      
+      // Add swipe areas
+      messageHTML += `
+        <div class="message-swipe-area left">
+          <button class="reply-button" onclick="setReply(${escapeHtml(JSON.stringify(data))})">↩</button>
+        </div>
+        <div class="message-swipe-area right">
+          <button class="react-button" onclick="showEmojiPicker(this.closest('.message'), ${escapeHtml(JSON.stringify(data))})">😊</button>
+        </div>
+      `;
+      
+      // Image bubble
+      messageHTML += '<div class="message-bubble image-bubble">';
+      messageHTML += `
+        <div class="image-container">
+          <img src="data:image/jpeg;base64,${data.image}" 
+               alt="Shared image" 
+               class="shared-image" 
+               onclick="openImageModal(this.src)"
+               style="max-width: 100%; height: auto; border-radius: 8px; cursor: pointer;" />
+        </div>
+      `;
+      
+      // Add timestamp
+      const timestamp = new Date(data.timestamp || Date.now()).toLocaleTimeString('en-US', {
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: false
+      });
+      messageHTML += `<div class="message-time">${timestamp}</div>`;
+      
+      messageHTML += '</div></div>';
+      
+      messageDiv.innerHTML = messageHTML;
+      
+      // Add to current message group
+      const currentGroup = elements.chatMessages.lastElementChild;
+      if (currentGroup && currentGroup.className === 'message-group') {
+        currentGroup.appendChild(messageDiv);
+      } else {
+        elements.chatMessages.appendChild(messageDiv);
+      }
+      
+      // Scroll to bottom
+      elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+    }
 
     function showDisconnectedMessage(message) {
       const messageDiv = document.createElement('div');
@@ -2982,6 +4532,9 @@
       isIncomingCall = true;
       callState = 'ringing';
       elements.incomingCall.classList.remove('hidden');
+      
+      // Start incoming call ringtone
+      playIncomingCallRingtone();
     }
     
     function hideIncomingCall() {
@@ -2992,6 +4545,9 @@
     async function answerCall() {
       try {
         hideIncomingCall();
+        
+        // Play call connected sound
+        playCallConnectedSound();
         
         // Request microphone permission
         localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -3044,6 +4600,9 @@
     
     function declineCall() {
       hideIncomingCall();
+      
+      // Play call declined sound
+      playCallDeclinedSound();
       
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({
@@ -3114,6 +4673,9 @@
     }
     
     function endVoiceCall() {
+      // Play call end sound
+      playCallEndSound();
+      
       if (localStream) {
         localStream.getTracks().forEach(track => track.stop());
         localStream = null;
@@ -3261,6 +4823,7 @@
           
         } else if (data.signalType === 'call-declined') {
           // Call was declined
+          playCallDeclinedSound();
           callState = 'idle';
           elements.startCallBtn.textContent = '📞';
           elements.startCallBtn.disabled = false;
@@ -3330,6 +4893,9 @@
       callStartTime = Date.now();
       callTimerInterval = setInterval(updateCallTimer, 1000);
       
+      // Show chat call timer
+      elements.chatCallTimer.classList.remove('hidden');
+      
       // Start the quiz game
       setTimeout(() => {
         startQuiz();
@@ -3346,6 +4912,9 @@
       }
       callStartTime = null;
       elements.callTimer.textContent = '00:00';
+      
+      // Hide chat call timer
+      elements.chatCallTimer.classList.add('hidden');
     }
     
     function updateCallTimer() {
@@ -3353,8 +4922,10 @@
         const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
         const minutes = Math.floor(elapsed / 60);
         const seconds = elapsed % 60;
-        elements.callTimer.textContent = 
-          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        elements.callTimer.textContent = timeString;
+        elements.chatCallTimer.textContent = `📞 ${timeString}`;
       }
     }
     
@@ -3440,7 +5011,11 @@
       const optionsContainer = document.getElementById('quizOptions');
       optionsContainer.innerHTML = '';
       
-      question.options.forEach((option, index) => {
+      // On mobile, show only 2 options
+      const isMobile = window.innerWidth <= 768;
+      const optionsToShow = isMobile ? question.options.slice(0, 2) : question.options;
+      
+      optionsToShow.forEach((option, index) => {
         const button = document.createElement('button');
         button.className = 'quiz-option';
         button.textContent = option;
@@ -3451,7 +5026,8 @@
       document.getElementById('quizResults').classList.add('hidden');
       userAnswer = null;
       partnerAnswer = null;
-      timeLeft = 30;
+      // Mobile gets 5 seconds, desktop gets 30
+      timeLeft = isMobile ? 5 : 30;
     }
 
     function selectQuizAnswer(answerIndex) {
@@ -3467,8 +5043,11 @@
       });
 
       // Send answer to partner (simulate for now)
+      const isMobile = window.innerWidth <= 768;
+      const maxOptions = isMobile ? 2 : 4;
+      
       setTimeout(() => {
-        partnerAnswer = Math.floor(Math.random() * 4); // Random partner answer
+        partnerAnswer = Math.floor(Math.random() * maxOptions); // Random partner answer
         showQuizResult();
       }, 1000);
     }
@@ -3476,6 +5055,7 @@
     function showQuizResult() {
       const options = document.querySelectorAll('.quiz-option');
       const question = quizQuestions[currentQuestionIndex];
+      const isMobile = window.innerWidth <= 768;
       
       options.forEach((opt, idx) => {
         opt.classList.remove('selected');
@@ -3490,16 +5070,30 @@
       const resultText = document.getElementById('quizResultText');
       const resultsDiv = document.getElementById('quizResults');
       
+      // Get the displayed options (mobile shows only first 2)
+      const displayedOptions = isMobile ? question.options.slice(0, 2) : question.options;
+      
       if (userAnswer === partnerAnswer) {
-        resultText.innerHTML = `🎉 You both chose: <strong>${question.options[userAnswer]}</strong>! Great minds think alike!`;
+        resultText.innerHTML = `🎉 You both chose: <strong>${displayedOptions[userAnswer]}</strong>! Great minds think alike!`;
         resultText.style.color = '#10b981';
       } else {
-        resultText.innerHTML = `You chose: <strong>${question.options[userAnswer]}</strong><br>Partner chose: <strong>${question.options[partnerAnswer]}</strong>`;
+        resultText.innerHTML = `You chose: <strong>${displayedOptions[userAnswer]}</strong><br>Partner chose: <strong>${displayedOptions[partnerAnswer]}</strong>`;
         resultText.style.color = '#f59e0b';
       }
       
       resultsDiv.classList.remove('hidden');
       clearInterval(quizTimer);
+      
+      // Auto-advance on mobile
+      if (isMobile) {
+        setTimeout(() => {
+          if (currentQuestionIndex < quizQuestions.length - 1) {
+            nextQuizQuestion();
+          } else {
+            endQuiz();
+          }
+        }, 2000); // Show results for 2 seconds then auto-advance
+      }
     }
 
     function nextQuizQuestion() {
@@ -3509,7 +5103,8 @@
     }
 
     function startQuizTimer() {
-      timeLeft = 30;
+      const isMobile = window.innerWidth <= 768;
+      timeLeft = isMobile ? 5 : 30;
       updateTimerDisplay();
       
       quizTimer = setInterval(() => {
@@ -3517,9 +5112,23 @@
         updateTimerDisplay();
         
         if (timeLeft <= 0) {
+          clearInterval(quizTimer);
+          
           // Auto-select random answer if time runs out
           if (userAnswer === null) {
-            selectQuizAnswer(Math.floor(Math.random() * 4));
+            const maxOptions = isMobile ? 2 : 4;
+            selectQuizAnswer(Math.floor(Math.random() * maxOptions));
+          }
+          
+          // Auto-advance to next question on mobile after showing results
+          if (isMobile) {
+            setTimeout(() => {
+              if (currentQuestionIndex < quizQuestions.length - 1) {
+                nextQuizQuestion();
+              } else {
+                endQuiz();
+              }
+            }, 2000); // Show results for 2 seconds then auto-advance
           }
         }
       }, 1000);
